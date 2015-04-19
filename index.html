@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html ng-app="SpotJams">
+<!--
+  * Copyright © 2012-2015, Intel Corporation. All rights reserved.
+  * Please see the included README.md file for license terms and conditions.
+  -->
+
+<head>
+    <title>SpotJams</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <!--
+  * The "meta viewport" tag (below) helps your app size appropriately to a device's ideal viewport.
+  * Note that Windows device viewports work better when initialized using the @viewport CSS rule.
+  * For a quick overview of "meta viewport" and @viewport, see this article:
+  *   http://webdesign.tutsplus.com/tutorials/htmlcss-tutorials/quick-tip-dont-forget-the-viewport-meta-tag
+  * To see how it works, try your app on a real device with and without a "meta viewport" tag.
+  * Additional useful references include:
+  *   http://www.quirksmode.org/mobile/viewports.html
+  *   http://www.quirksmode.org/mobile/metaviewport/devices.html
+  *   https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html
+-->
+    <!-- <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1"> -->
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=no">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes, minimum-scale=1, maximum-scale=2"> -->
+    <style>
+    /* following three (cascaded) are equivalent to above three meta viewport statements */
+    /* see http://www.quirksmode.org/blog/archives/2014/05/html5_dev_conf.html */
+    /* see http://dev.w3.org/csswg/css-device-adapt/ */
+    
+    @-ms-viewport {
+        width: 100vw;
+        min-zoom: 100%;
+        zoom: 100%;
+    }
+    
+    @viewport {
+        width: 100vw;
+        min-zoom: 100% zoom: 100%;
+    }
+    
+    @-ms-viewport {
+        user-zoom: fixed;
+        min-zoom: 100%;
+    }
+    
+    @viewport {
+        user-zoom: fixed;
+        min-zoom: 100%;
+    }
+    /*@-ms-viewport { user-zoom: zoom ; min-zoom: 100% ; max-zoom: 200% ; }   @viewport { user-zoom: zoom ; min-zoom: 100% ; max-zoom: 200% ; }*/
+    </style>
+    
+    <link rel="stylesheet" href="css/fonts/patua-one/stylesheet.css">
+    <link rel="stylesheet" href="css/fonts/roboto_regular_macroman/stylesheet.css">
+    <link rel="stylesheet" href="vendor/bower_components/angular-material/angular-material.min.css" />
+    <link rel="stylesheet" href="vendor/whhg-font/css/whhg.css">
+    <link rel="stylesheet" href="vendor/bower_components/cropper/dist/cropper.min.css">
+
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet/less" type="text/css" href="less/colors.less" />
+    <link rel="stylesheet/less" type="text/css" href="less/indexes.less" />
+    <link rel="stylesheet/less" type="text/css" href="less/profile.less" />
+    <link rel="stylesheet/less" type="text/css" href="less/cards.less" />
+    <link rel="stylesheet/less" type="text/css" href="less/player.less" />
+    <link rel="stylesheet/less" type="text/css" href="less/tracks.less" />
+</head>
+
+<body ng-controller="BodyController as bodyCtrl">
+    <div id="body-menu-shim" hm-swiperight="bodyCtrl.leftMenuSlide($event)">
+    </div>
+
+    <div id="root-view-div" ng-controller="ToolbarController as toolbarCtrl">
+        <md-content class="md-whiteframe-z1">
+            <md-toolbar class="yellow-bg">
+                <div class="md-toolbar-tools">
+                    <div class="yellow-bg" hm-tap="toolbarCtrl.toggleLeft($event)" ng-click="toolbarCtrl.toggleLeft($event)" style="height: 40px; width: 50px; margin-right: 5px;" layout="row" layout-align="center center">
+                        <i class="icon-menu blue-text" style="padding-top:2px;"></i>
+                    </div>
+                    <span style="font-size: 1.2em; font-family: 'patua_oneregular';" class="blue-text">
+                        {{ tempTitle || "SpotJams" }}
+                    </span>
+                    <span flex></span>
+                    <!-- <div class="yellow-bg" hm-tap="toolbarCtrl.toggleLeft($event)" ng-click="toolbarCtrl.toggleLeft($event)" style="height: 50px; width: 50px; margin-right: 5px;" layout="row" layout-align="center center">
+                        <i class="icon-search blue-text" style="padding-top:2px;"></i>
+                    </div> -->
+                </div>
+            </md-toolbar>
+        </md-content>
+        <div ng-controller="LeftMenuCtrl as lmCtrl">
+            <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" hm-swipeleft="lmCtrl.closeLeft($event)" hm-panleft="lmCtrl.closeLeft($event)" layout="column" style="min-width: 120px !important; width: 60vw !important; max-width: 304px !important;">
+                <md-toolbar class="blue-bg yellow-text" layout="row" layout-align="space-between center">
+                    <span style="font-size: 1.2em;" class="md-toolbar-tools">Menu</span>
+                    <span flex></span>
+                    <div hm-tap="lmCtrl.closeLeft($event)" ng-click="lmCtrl.closeLeft($event)" style="height: 40px; width: 60px; margin-right: 5px; font-size: 1.2em;" layout="row" layout-align="center center">
+                        <i class="icon-remove"></i>
+                    </div>
+                </md-toolbar>
+                <md-content flex layout="column" layout-align="start start" style="font-size: 1.2em;">
+                    
+                    <span class="left-menu-item" layout="row" ng-click="lmCtrl.gotoHome($event)" hm-tap="lmCtrl.gotoHome($event)" layout-align="start center">
+                        <i class="icon-home blue-text" ></i>
+                        Home
+                    </span>
+
+                    <span class="left-menu-item" layout="row" ng-click="lmCtrl.gotoDiscover($event)" hm-tap="lmCtrl.gotoDiscover($event)" layout-align="start center">
+                        <i class="icon-findfriends blue-text" ></i>
+                        Discover
+                    </span>
+
+                    <span class="left-menu-item" layout="row" ng-click="lmCtrl.gotoMessages($event)" hm-tap="lmCtrl.gotoMessages($event)" layout-align="start center">
+                        <i class="icon-socialnetwork blue-text" ></i>
+                        Messages
+                    </span>
+
+                    <span class="left-menu-item" layout="row" ng-click="lmCtrl.gotoFriends($event)" hm-tap="lmCtrl.gotoFriends($event)" layout-align="start center">
+                        <i class="icon-groups-friends blue-text" ></i>
+                        Friends
+                    </span>
+
+                    <span class="left-menu-item" layout="row" ng-click="lmCtrl.gotoProfile($event)" hm-tap="lmCtrl.gotoProfile($event)" layout-align="start center">
+                        <i class="icon-user blue-text" ></i>
+                        Profile
+                    </span>
+
+                    <span class="left-menu-item" layout="row" ng-click="lmCtrl.gotoTracks($event)" hm-tap="lmCtrl.gotoTracks($event)" layout-align="start center">
+                        <i class="icon-cassette blue-text" ></i>
+                        Tracks
+                    </span>
+
+                    <span class="left-menu-item" layout="row" ng-click="lmCtrl.gotoTutorials($event)" hm-tap="lmCtrl.gotoTutorials($event)" layout-align="start center">
+                        <i class="icon-student-school blue-text" ></i>
+                        Tutorials
+                    </span>
+
+                    <span class="left-menu-item" layout="row" ng-click="lmCtrl.gotoSettings($event)" hm-tap="lmCtrl.gotoSettings($event)" layout-align="start center">
+                        <i class="icon-cog blue-text" ></i>
+                        Settings
+                    </span>
+
+                    <span class="left-menu-item" layout="row" ng-click="lmCtrl.gotoLogout($event)" hm-tap="lmCtrl.gotoLogout($event)" layout-align="start center">
+                        <i class="icon-handtwofingers blue-text" ></i>
+                        Logout
+                    </span>
+
+                    <span flex><span>
+                </md-content>
+            </md-sidenav>
+        </div>
+
+        <div ng-view>
+            <!-- Content is loaded from partials templates -->
+        </div>
+       
+
+
+        <div id="audio-player-menu-shim" hm-swipeup="bodyCtrl.audioPlayerSlide($event)"></div>
+        <playlist></playlist>
+        
+    </div>
+
+
+
+
+
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-60486108-1', 'auto');
+      // ga('send', 'pageview');
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
+    
+    <script src="vendor/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="vendor/bower_components/jquery-ui/ui/minified/widget.min.js"></script>
+    <script src="vendor/jquery-plugins/jquery.geocomplete.min.js"></script>
+
+    <script src="vendor/bower_components/moment/min/moment.min.js"></script>
+    <script src="vendor/bower_components/hammerjs/hammer.min.js"></script>
+    <script src="vendor/bower_components/cropper/dist/cropper.min.js"></script>
+    <script src="vendor/bower_components/sklad/sklad.js"></script>
+
+    <script src="vendor/canvas-to-blob.min.js"></script>
+
+    <script src="vendor/bower_components/angular/angular.min.js"></script>
+    <script src="vendor/bower_components/angular-touch/angular-touch.min.js"></script>
+    <script src="vendor/bower_components/angular-animate/angular-animate.min.js"></script>
+    <script src="vendor/bower_components/angular-aria/angular-aria.min.js"></script>
+    <script src="vendor/bower_components/angular-material/angular-material.min.js"></script>
+    <script src="vendor/bower_components/angular-route/angular-route.min.js"></script>
+    <script src="vendor/bower_components/angular-resource/angular-resource.min.js"></script>
+
+    <script src="vendor/bower_components/ryanmullins-angular-hammer/angular.hammer.min.js"></script>
+
+    <script src="vendor/bower_components/angulartics/dist/angulartics.min.js"></script>
+    <script src="vendor/bower_components/angulartics/dist/angulartics-ga.min.js"></script>
+    <script src="vendor/bower_components/angulartics/dist/angulartics-scroll.min.js"></script>
+
+    <script>
+    less = {
+        env: 'development'
+    };
+    </script>
+    <script src="vendor/bower_components/less/dist/less.min.js"></script>
+    <script>
+    less.watch();
+    </script>
+
+    <script src="cordova.js"></script>
+
+    <!-- for your event code, see README and file comments for details -->
+    <script src="js/click.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/routes.js"></script>
+    <script src="js/filters.js"></script>
+
+
+    <script src="js/services/auth_manager.js"></script>
+    <script src="js/services/image_manager.js"></script>
+    <script src="js/services/track_manager.js"></script>
+    <script src="js/services/profile_manager.js"></script>
+    <script src="js/services/social_manager.js"></script>
+
+
+    <script src="js/directives/cards/person-card.js"></script>
+    <script src="js/directives/cards/person-strip.js"></script>
+    <script src="js/directives/lists/people-list.js"></script>
+
+    <script src="js/directives/cards/track-card.js"></script>
+    <script src="js/directives/cards/track-strip.js"></script>
+    <script src="js/directives/lists/track-list.js"></script>
+    
+   
+    <script src="js/directives/player/playlist.js"></script> 
+
+    <script src="js/directives/media/track_recorder.js"></script>
+    <script src="js/directives/media/track_player.js"></script>
+
+
+    <script src="js/controllers/player.js"></script>
+    <script src="js/controllers/toolbar.js"></script>
+    <script src="js/controllers/index.js"></script>
+    <script src="js/controllers/main.js"></script>
+
+    <script src="js/controllers/auth/login.js"></script>
+    <script src="js/controllers/auth/register.js"></script>
+
+    <script src="js/controllers/utils/settings.js"></script>
+    <script src="js/controllers/utils/autocomplete.js"></script>
+
+    <script src="js/controllers/find/people.js"></script>
+
+    <script src="js/controllers/profile/setup.js"></script>
+    <script src="js/controllers/profile/section.js"></script>
+    <script src="js/controllers/profile/profile.js"></script>
+    <script src="js/controllers/profile/card.js"></script>
+    <script src="js/controllers/profile/friends.js"></script>
+    <script src="js/controllers/profile/follows.js"></script>
+
+    <script src="js/controllers/public/profile.js"></script>
+    <script src="js/controllers/public/friends.js"></script>
+    <script src="js/controllers/public/follows.js"></script>
+
+
+    <!-- for your init code, see README and file comments for details -->
+    <script src="js/init-app.js"></script>
+
+</html>
+</body>

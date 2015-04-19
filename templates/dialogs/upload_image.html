@@ -1,0 +1,23 @@
+<md-dialog flex="95">
+    <md-content>
+        <div layout="column" layout-fill>
+            <md-button class="md-raised md-primary blue-bg" hm-tap="capturePhotoWithFile($event);" hm-press="capturePhotoWithFile($event);">Take Photo</md-button>
+            <md-button class="md-raised md-primary blue-bg" hm-tap="getPhoto($event, pictureSource.PHOTOLIBRARY);" hm-press="getPhoto($event, pictureSource.PHOTOLIBRARY);">Upload Photo</md-button>
+            <div id="image-container">
+                <img style="max-height: 40vh; height: 100%; width: 100% !important; display:none;" id="smallImage" src="" />
+            </div>
+            <div layout="row" layout-fill layout-align="space-between start" style="font-size: 2em;">
+                <i class="icon-rotatecounterclockwise" ng-click="rotateCounterClockwise($event)" hm-press="rotateCounterClockwise($event)"></i>
+                <i class="icon-rotateclockwise" ng-click="rotateClockwise($event)" hm-press="rotateClockwise($event)"></i>
+            </div>
+        </div>
+    </md-content>
+    <div class="md-actions">
+        <md-button class="md-raised md-primary blue-bg" ng-click="saveImage($event)" hm-tap="saveImage($event)" hm-press="saveImage($event)">
+            Save Image
+        </md-button>
+        <md-button class="md-raised md-primary red-bg" ng-click="closeDialog($event)" hm-tap="closeDialog($event)" hm-press="closeDialog($event)">
+            Cancel
+        </md-button>
+    </div>
+</md-dialog>

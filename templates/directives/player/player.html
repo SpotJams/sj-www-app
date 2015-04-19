@@ -1,0 +1,12 @@
+<div id="audio-player" ng-controller="PlayerPlayerController">
+    <audio id="music" preload="true" src="http://kolber.github.io/audiojs/demos/mp3/09-infinite-victory.mp3">
+    </audio>
+    <div layout="row" layout-fill layout-align="start center">
+	    <span class="icon-play" ng-click="play($event)" ng-hide="playing"></span>
+	    <span class="icon-pause" ng-click="pause($event)" ng-show="playing"></span>
+	    <div layout="column">
+		    <span>{{track.length | tracktime }}</span>
+		    <md-progress-linear flex id="progBar" md-mode="determinate" value="{{playedContent}}"></md-progress-linear>
+		</div>
+	</div>
+</div>

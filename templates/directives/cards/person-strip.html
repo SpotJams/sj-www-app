@@ -1,0 +1,37 @@
+<div ng-controller="PersonStripController">
+    <div class="person-strip-container" layout="column" layout-fill>
+        
+        <!-- Person Strip -->
+        <div layout="row" layout-fill>
+            <div ng-click="gotoUser($event, person.uid)">
+                <img ng-src="{{person.thumbURL}}"></img>
+            </div>
+            <div flex layout="column" style="margin-left: 10px; text-align: left; font-size: 0.8em;">
+                <div>
+                <b style="font-size: 1.6em" class="blue-text">
+                    {{person.username}} </b><span
+                >{{person.city}}, {{person.state}}</span>
+                </div>
+                <div>
+                    <b style="font-size: 1.2em;" class="blue-text">Instruments</b>:
+                    <i ng-repeat="item in person.instruments" style "font-style: normal;">
+                        {{item.type}}; </i>
+                </div>
+                <div>
+                    <b style="font-size: 1.2em;" class="blue-text">Genres</b>:
+                    <i ng-repeat="item in person.genresStr" style "font-style: normal;">
+                        {{item.displayName}}; </i>
+                </div>
+            </div>
+            <div class="person-strip-controls" layout="column" layout-align="space-around end">
+                <span class="icon-avatar blue-text" ng-click="gotoUser($event, person.uid)"></span>
+                <span class="icon-dropmenu" ng-show="cardHidden" ng-click="showCard($event)"></span>
+                <span class="icon-uploadalt" ng-hide="cardHidden" ng-click="hideCard($event)"></span>
+            </div> 
+        </div>
+        
+        <!-- Person Card for in-list expansion -->
+        <person-card person="person" ng-hide="cardHidden"></person-card>
+
+    </div>
+</div>

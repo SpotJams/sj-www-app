@@ -1,0 +1,83 @@
+<div id="profile-owner-view" ng-controller="ProfileController" layout="column" style="width: 100%" layout-padding>
+
+    <md-content class="profile-section md-whiteframe-z1" layout="column" layout-fill>
+        <div class="section-title">
+            <span>{{profile.username}}</span>
+        </div>
+
+        <div flex id="profile-header-row" class="md-whiteframe-z1" layout="row" layout-fill>
+            <div flex>
+                <img  id="profile-image" ng-src="{{profile.imageURL}}" style="width: 100%" class="md-whiteframe-z1"></img>
+            </div>
+            <div flex id="profile-img-region" layout="column">
+                <b style="font-size: 1.5em">{{profile.fname}}</b>
+                <b>{{profile.city}}, {{profile.state}}</b>
+                <p>{{profile.shortBio}}</p>
+            </div>
+        </div>
+
+    </md-content>
+
+
+    <div flex id="profile-button-row" layout="row" layout-align="space-around center" style="text-align:left; font-size: 1em;">
+        <md-button class="md-raised md-primary blue-bg" ng-click="gotoFriends($event)" hm-tap="gotoFriends($event)">Friends</md-button>
+        <md-button class="md-raised md-primary blue-bg" ng-click="gotoFollows($event)" hm-tap="gotoFollows($event)">Followings</md-button>
+        <md-button class="md-raised md-primary blue-bg" ng-click="gotoTracks($event)" hm-tap="gotoTracks($event)">Tracks</md-button>
+        <!-- <md-button class="md-raised md-primary red-bg" href="#/profile/setup?next_page=%2Fprofile%2Fuser">Edit</md-button> -->
+        <!-- <md-button class="md-raised md-primary red-bg" hm-tap="gotoEditProfile($event)" hm-press="gotoEditProfile($event)">Edit</md-button> -->
+        <md-button class="md-raised md-primary red-bg" ng-click="gotoEditProfile($event)">Edit</md-button>
+    </div>
+
+    <div class="profile-section md-whiteframe-z1">
+        <md-content layout="column" layout-fill>
+            <div id="styles-title" class="section-title" layout="row">
+                <span flex>About me</span>
+            </div>
+
+            <div class="section-content" layout="column">
+                <p>
+                    &nbsp; &nbsp; {{profile.longBio}}
+                </p>
+            </div>
+        </md-content>
+    </div>
+    
+    <div class="profile-section md-whiteframe-z1">
+        <md-content layout="column" layout-fill>
+            <div id="styles-title" class="section-title" layout="row">
+                <span flex>Styles and genres</span>
+            </div>
+
+            <div class="section-content" layout="column">
+                <p ng-repeat="item in profile.genresStr">
+                    &nbsp; &nbsp; <b>{{item.displayName}}</b>
+                </p>
+            </div>
+        </md-content>
+    </div>
+
+    <md-content class="profile-section md-whiteframe-z1" layout="column" layout-fill>
+        <div id="instruments-title" class="section-title" layout="row">
+            <span flex>Instruments</span>
+        </div>
+
+        <div class="section-content" layout="column">
+            <p ng-repeat="item in profile.instruments">
+                &nbsp; &nbsp; <b>{{item.type}}</b>
+            </p>
+        </div>
+    </md-content>
+
+    <md-content class="profile-section md-whiteframe-z1" layout="column" layout-fill>
+        <div id="tracks-title" class="section-title" layout="row">
+            <span flex>Tracks</span>
+            <i class="icon-play green-text" ng-click="playAllTracks($event)"></i>
+            <i class="icon-indentrightalt" ng-click="queueAllTracks($event)"></i>
+        </div>
+
+        <div class="section-content" layout="column">
+            <track-list tracks="profile.tracks"></track-list>
+        </div>
+    </md-content>
+
+</div>

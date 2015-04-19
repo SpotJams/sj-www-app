@@ -1,0 +1,23 @@
+<div ng-controller="FollowsListController">
+    <md-tabs>
+        
+        <md-tab label="Following">
+            <div class="profile-section md-whiteframe-z1">
+                <md-content layout="column" layout-fill>
+                    <div class="section-content" layout="column">
+                        <people-list people="data.following"></people-list>
+                    </div>
+                </md-content>
+            </div>
+        </md-tab>
+        
+        <md-tab label="Followers">
+            <div class="profile-section md-whiteframe-z1">
+                <md-content layout="column" layout-fill>
+                    <div class="section-content" layout="column">
+                        <people-list people="data.followers"></people-list>
+                    </div>
+                </md-content>
+            </div>
+        </md-tab>
+</div>

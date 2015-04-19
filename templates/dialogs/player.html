@@ -1,0 +1,35 @@
+
+<div id="playlist-container" ng-controller="PlayerDialogController">
+    <div layout="column" id="playlist-player-container">
+        <audio id="music" preload="true" src="http://kolber.github.io/audiojs/demos/mp3/09-infinite-victory.mp3">
+        </audio>
+        <div layout="row" layout-fill layout-align="space-around center">
+            <span id="prevButton" class="icon-previous" ng-click="prev($event)"></span>
+            <span class="icon-play green-text" ng-click="play($event)" ng-hide="playing"></span>
+            <span class="icon-pause yellow-text" ng-click="pause($event)" ng-show="playing"></span>
+            <div flex layout="column">
+                <span style="font-size=0.8em">{{track.length | tracktime }}</span>
+                <md-progress-linear id="progBar" md-mode="determinate" value="{{playedContent}}"></md-progress-linear>
+            </div>
+            <span id="nextButton" class="icon-next" ng-click="next($event)"></span>
+            <span id="settingsButton" class="icon-cog" ng-click="settings($event)"></span>
+        </div>
+    </div>
+    <div layout="column" id="playlist-list-container">
+        <div ng-repeat="track in tracks">
+            <div layout="column" layout-margin>
+                <div class="playlist-item" layout="row" layout-fill>
+                    <div class="playlist-item-info" flex layout="column" layout-fill>
+                        <span><b>{{track.title}}</b></span>
+                        <span>{{track.length | tracktime }}</span>
+                    </div>
+                    <div class="playlist-item-controls" layout="row" layout-align="space-around center">
+                        <span class="icon-play green-text" ng-click="playNow($event,track.trackId)"></span>
+                        <!-- <span class="icon-cassette blue-text" ng-click="gotoTrack($event, person.uid)"></span> -->
+                        <span class="icon-remove"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

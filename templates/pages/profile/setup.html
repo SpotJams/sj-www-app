@@ -1,0 +1,148 @@
+<div id="profile-setup-view" class="extra-bottom-space" ng-controller="SetupController as setupCtrl" layout="column" layout-margin layout-fill layout-padding>
+    <md-content class="profile-section md-whiteframe-z1" layout="column" layout-fill>
+        <div class="section-title">
+            <span>Basic Info</span>
+        </div>
+        <div class="section-content" layout="column">
+            <div layout="row">
+                <div flex layout="column" layout-padding>
+                    <md-input-container>
+                        <label>First name</label>
+                        <input required ng-model="setupCtrl.profile.fname" ng-change="setupCtrl.markDirty()"/>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Last name</label>
+                        <input required ng-model="setupCtrl.profile.lname" ng-change="setupCtrl.markDirty()"/>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Birthday</label>
+                        <input required type="date" ng-model="setupCtrl.date" ng-change="setupCtrl.markDirty()"/>
+                    </md-input-container>
+                </div>
+                <div layout="column" flex="50">
+                    <img id="setup-profile-image" ng-src="{{setupCtrl.profile.imageURL}}" style="width: 100%" class="md-whiteframe-z1"></img>
+                    <br>
+                    <md-button class="md-raised md-primary blue-bg" ng-click="setupCtrl.showImageDialog($event)" hm-tap="setupCtrl.showImageDialog($event)">
+                        Update Image
+                    </md-button>
+                </div>
+            </div>
+            <md-input-container>
+                <input required id="profile-location-input" name="location" ng-model="setupCtrl.profile.location" ng-change="setupCtrl.markDirty()"/>
+            </md-input-container>
+            <md-input-container>
+                <label>Status</label>
+                <input required name="shortBio" ng-model="setupCtrl.profile.shortBio" md-maxlength="70" ng-change="setupCtrl.markDirty()"/>
+            </md-input-container>
+            <md-input-container>
+                <label>About you</label>
+                <textarea required name="longBio" ng-model="setupCtrl.profile.longBio" md-maxlength="420" ng-change="setupCtrl.markDirty()"/>
+            </md-input-container>
+        </div>
+    </md-content>
+    <md-content class="profile-section md-whiteframe-z1">
+        <div layout="column" layout-fill ng-controller="ProfileEditSectionController">
+            <div id="purpose-title" class="section-title" layout="row">
+                <span flex>Jambitions</span>
+                <!-- <i class="icon-plus-sign" ng-show="!adding" ng-click="toggleInput(true,$event,'purpose-title')"></i>
+                <i class="icon-minus-sign" ng-show="adding" ng-click="toggleInput(false,$event)"></i> -->
+            </div>
+            <div class="section-content" style="width: 95%" layout="column" layout-fill layout-align="start start">
+
+                <div layout="row" layout-fill layout-align="start center">
+                    <md-checkbox md-no-ink class="md-primary" ng-model="a1" ng-change="setupCtrl.markDirty()"></md-checkbox><span flex>Find new jam buddies</span>
+                </div>
+                <div layout="row" layout-fill layout-align="start center">
+                    <md-checkbox md-no-ink class="md-primary" ng-model="a2" ng-change="setupCtrl.markDirty()"></md-checkbox><span flex>Causual jamming</span>
+                </div>
+                <div layout="row" layout-fill layout-align="start center">
+                    <md-checkbox md-no-ink class="md-primary" ng-model="a3" ng-change="setupCtrl.markDirty()"></md-checkbox><span flex>Collaborative Layering</span>
+                </div>
+                <div layout="row" layout-fill layout-align="start center">
+                    <md-checkbox md-no-ink class="md-primary" ng-model="a4" ng-change="setupCtrl.markDirty()"></md-checkbox><span flex>Join a band</span>
+                </div>
+                <div layout="row" layout-fill layout-align="start center">
+                    <md-checkbox md-no-ink class="md-primary" ng-model="a5" ng-change="setupCtrl.markDirty()"></md-checkbox><span flex>Promote a band</span>
+                </div>
+                <div layout="row" layout-fill layout-align="start center">
+                    <md-checkbox md-no-ink class="md-primary" ng-model="a6" ng-change="setupCtrl.markDirty()"></md-checkbox><span flex>Learn an instrument</span>
+                </div>
+                <div layout="row" layout-fill layout-align="start center">
+                    <md-checkbox md-no-ink class="md-primary" ng-model="a7" ng-change="setupCtrl.markDirty()"></md-checkbox><span flex>Find live music</span>
+                </div>
+                <div layout="row" layout-fill layout-align="start center">
+                    <md-checkbox md-no-ink class="md-primary" ng-model="a8" ng-change="setupCtrl.markDirty()"></md-checkbox><span flex>Find local SpotJams</span>
+                </div>
+            </div>
+        </div>
+    </md-content>
+    <div class="profile-section md-whiteframe-z1">
+        <md-content layout="column" layout-fill ng-controller="ProfileEditSectionController">
+            <div id="styles-title" class="section-title" layout="row">
+                <span flex>Styles and genres</span>
+                <i class="icon-plus-sign" ng-show="!adding" ng-click="toggleInput(true,$event,'styles-title')"></i>
+                <i class="icon-minus-sign" ng-show="adding" ng-click="toggleInput(false,$event)"></i>
+            </div>
+            <div class="section-input" ng-show="adding" >
+                <div ng-controller="AutocompleteGenreController as ctrl">
+                    <md-autocomplete ng-disabled="ctrl.isDisabled" md-no-cache="ctrl.noCache" md-selected-item="ctrl.selectedItem" md-selected-item-change="setupCtrl.addGenre(ctrl.selectedItem)" md-search-text="ctrl.searchText" md-items="item in ctrl.querySearch(ctrl.searchText)" md-item-text="item.display" placeholder="Styles and Genres (autocomplete)">
+                        <span md-highlight-text="ctrl.searchText">{{item.display}}</span>
+                    </md-autocomplete>
+                </div>
+            </div>
+            <div class="section-content" layout="column">
+                <p ng-repeat="item in setupCtrl.profile.genresStr">
+                    &nbsp; &nbsp; <b>{{item.displayName}}</b>
+                </p>
+            </div>
+        </md-content>
+    </div>
+    <md-content class="profile-section md-whiteframe-z1" layout="column" layout-fill ng-controller="ProfileEditSectionController">
+        <div id="instruments-title" class="section-title" layout="row">
+            <span flex>Instruments</span>
+            <i class="icon-plus-sign" ng-show="!adding" ng-click="toggleInput(true,$event,'instruments-title')"></i>
+            <i class="icon-minus-sign" ng-show="adding" ng-click="toggleInput(false,$event)"></i>
+        </div>
+        <div class="section-input" ng-show="adding">
+            <div ng-controller="AutocompleteInstrController as ctrl">
+                <md-autocomplete ng-disabled="ctrl.isDisabled" md-no-cache="ctrl.noCache" md-selected-item="ctrl.selectedItem" md-selected-item-change="setupCtrl.addInstrument(ctrl.selectedItem)" md-search-text="ctrl.searchText" md-items="item in ctrl.querySearch(ctrl.searchText)" md-item-text="item.display" placeholder="Instruments and vocals (autocomplete)">
+                    <span md-highlight-text="ctrl.searchText">{{item.display}}</span>
+                </md-autocomplete>
+            </div>
+            <md-input-container>
+                <label>Years Played</label>
+                <input required name="years" />
+                <!-- <input required name="years" md-maxlength="70" /> -->
+            </md-input-container>
+            <md-input-container>
+                <label>Skill Level</label>
+                <textarea required name="skills" />
+            </md-input-container>
+        </div>
+        <div class="section-content" layout="column">
+            <p ng-repeat="item in setupCtrl.profile.instruments">
+                &nbsp; &nbsp; <b>{{item.type}}</b>
+            </p>
+        </div>
+    </md-content>
+    <md-content class="profile-section md-whiteframe-z1" layout="column" layout-fill ng-controller="ProfileEditSectionController">
+        <div id="tracks-title" class="section-title" layout="row">
+            <span flex>Tracks</span>
+            <i class="icon-plus-sign" ng-show="!adding" ng-click="toggleInput(true,$event,'tracks-title')"></i>
+            <i class="icon-minus-sign" ng-show="adding" ng-click="toggleInput(false,$event)"></i>
+        </div>
+        <div class="section-input" ng-show="adding">
+            <track-recorder track="'dummy_track'"></track-recorder>
+        </div>
+        <div class="section-content" layout="column">
+            <track-list tracks="setupCtrl.profile.tracks"></track-list>
+        </div>
+    </md-content>
+    <!-- <md-content class="bottom-right-btn green-bg"> -->
+    <div ng-show="setupCtrl.dirty">
+        <md-button class="bottom-right-btn green-bg md-fab md-whiteframe-z2" ng-click="setupCtrl.trySave($event)" hm-tap="setupCtrl.trySave($event)" ng-show="setupCtrl.dirty">
+            <i ng-class="setupCtrl.saving" ng-show="setupCtrl.dirty"></i>
+        </md-button>
+    </div>
+    <!-- </md-content> -->
+</div>

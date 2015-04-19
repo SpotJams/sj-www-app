@@ -1,0 +1,32 @@
+<md-dialog flex="95">
+    <md-content>
+        <div layout="column" layout-fill>
+            <!-- <md-button class="md-raised md-primary blue-bg" hm-tap="capturePhotoWithFile($event);" hm-press="capturePhotoWithFile($event);">Record Track</md-button> -->
+            <b class="blue-text" style="font-size: 2em;">Record Track</b>
+            <div id="track-container">
+                <span id="media" ng-show="recording">Recording audio...</span>
+                <span id="audio_position" ng-show="recording"></span>
+                <div ng-show="converting" layout="column" layout-align="center center">
+                    <p>Converting</p>
+                    <md-progress-circular md-mode="indeterminate" class="blue-text"></md-progress-circular>
+                </div>
+                <audio id="audio-preview" ng-show="recordingDone" style="width: 100% !important;" controls></audio>
+                <p ng-show="recordingDone" ><strong data-key="size">Size</strong> <span class="value" id="track-size"></span> <em>Kilobytes</em></p>
+            </div>
+            <div layout="row" layout-align="space-around center">
+                <md-button id="start-recording-audio" class="md-raised md-primary green-bg" hm-tap="startRecording($event);" hm-press="startRecording($event);">Record</md-button>
+                <md-button id="stop-recording-audio"class="md-raised md-primary red-bg" hm-tap="stopRecording($event);" hm-press="stopRecording($event);">Stop</md-button>
+            </div>
+            <br>
+            <md-button id="stop-recording-audio"class="md-raised md-primary blue-bg" hm-tap="getAudio($event);" hm-press="getAudio($event);">Upload / Record externally</md-button>
+        </div>
+    </md-content>
+    <div class="md-actions">
+        <md-button class="md-raised md-primary blue-bg" hm-tap="saveTrack()" hm-press="saveTrack()">
+            Save Track
+        </md-button>
+        <md-button class="md-raised md-primary red-bg" hm-tap="closeDialog()" hm-press="closeDialog()">
+            Cancel
+        </md-button>
+    </div>
+</md-dialog>

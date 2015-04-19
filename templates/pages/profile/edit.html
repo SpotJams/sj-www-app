@@ -1,0 +1,72 @@
+<div id="profile-edit-view-div">
+
+<h1>Profile Edit</h1>
+
+    <form name="registerForm" ng-controller="ProfileEditController" ng-submit="trySave()">
+        <div class="row">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-10">
+                <fieldset class="form-group">
+                    <input id="register-fname" ng-model="profile.fname" name="fname" type="text" placeholder="fname" class="form-control input-lg" />
+                </fieldset>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-10">
+                <fieldset class="form-group">
+                    <input id="register-lname" ng-model="profile.lname" name="lname" type="text" placeholder="lname" class="form-control input-lg" />
+                </fieldset>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-10">
+                <fieldset class="form-group">
+                    <input id="register-username" ng-model="profile.username" name="username" type="text" placeholder="username" class="form-control input-lg" />
+                </fieldset>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-10">
+                <fieldset class="form-group">
+                    <input id="register-email" ng-model="profile.email" name="email" type="email" placeholder="email" class="form-control input-lg" />
+                </fieldset>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-10">
+                <fieldset class="form-group">
+                    <input id="register-password" ng-model="profile.password" name="password" type="password" placeholder="password" class="form-control input-lg" />
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-10">
+                <fieldset class="form-group">
+                    <input id="register-confirm" ng-model="profile.confirm" name="password" type="password" placeholder="password" class="form-control input-lg" />
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-10">
+	            <button id="register-button" type="submit" class="btn btn-lg btn-success" style="width: 100%">Update</button>
+	        </div>
+        </div>
+    </form>
+
+</div>

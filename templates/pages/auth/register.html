@@ -1,0 +1,49 @@
+<div id="register-div" ng-controller="RegisterController as registerCtrl" layout="column" layout-margin layout-fill layout-padding>
+
+    <i style="font-size:3em; font-style: normal; font-weight: bold;" class="blue-text">SpotJams</i>
+    <i style="font-size:1.5em; font-style: normal;">humans together for music</i>
+    <br>
+    <br>
+
+    <md-content class="md-padding" layout="column" layout-margin style="font-size:1.2em; text-align: left;">
+
+        <md-input-container>
+            <label>First Name</label>
+            <input id="register-fname" ng-model="registerCtrl.creds.fname" name="fname" type="text" required style="font-size: 1.2em;" />
+        </md-input-container>
+
+        <md-input-container>
+            <label>Last Name</label>
+            <input id="register-lname" ng-model="registerCtrl.creds.lname" name="lname" type="text" required style="font-size: 1.2em;" />
+        </md-input-container>
+
+        <md-input-container>
+            <label>Username</label>
+            <input id="register-username" ng-model="registerCtrl.creds.username" name="username" type="text" required style="font-size: 1.2em;" />
+        </md-input-container>
+
+        <md-input-container>
+            <label>Email</label>
+            <input id="register-email" ng-model="registerCtrl.creds.email" name="email" type="email" required style="font-size: 1.2em;" />
+        </md-input-container>
+
+        <md-input-container>
+            <label>Password</label>
+            <input id="register-password" ng-model="registerCtrl.creds.password" name="password" type="password" required style="font-size: 1.2em;" />
+        </md-input-container>
+
+        <md-input-container>
+            <label>Password Confirm</label>
+            <input id="register-confirm" ng-model="registerCtrl.creds.confirm" name="password" type="password" required style="font-size: 1.2em;" />
+        </md-input-container>
+
+    </md-content>
+
+    <md-content class="md-padding" layout="column" layout-margin style="font-size:1.5em;">
+        <md-button class="md-raised md-primary green-bg" hm-tap="registerCtrl.tryRegister($event)">
+            Register
+        </md-button>
+    </md-content>
+
+
+</div>

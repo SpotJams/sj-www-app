@@ -1,0 +1,58 @@
+<md-content ng-controller="TrackRecorderController">
+    <div layout="column" layout-margin>
+        <div layout="row" layout-fill style="min-height: 60px;">
+            <!--            <div flex="60" layout="column" layout-fill>
+                <div><span class="blue-text" style="font-size: 1.5em;">Add Track</span></div>
+            </div> -->
+            <div flex="50" layout="column" id="record-container">
+                <div layout="row" layout-align="space-between center" ng-show="hasRecording">
+                    <!-- <md-button class="md-raised md-primary blue-bg" hm-tap="uploadAudio($event);" ng-click="uploadAudio($event);">
+                        Upload
+                    </md-button> -->
+                    <md-button class="md-raised md-primary red-bg" hm-tap="clearRecording($event);" ng-click="clearRecording($event);">
+                        Clear
+                    </md-button>
+                </div>
+            </div>
+            <div class="track-controls yellow-text blue-bg" flex="50" layout="column" layout-align="space-around center">
+                <i class="icon-record red-text" ng-hide="isRecording || hasRecording" hm-tap="startRecording($event)" ng-click="startRecording($event)"></i>
+                <i class="icon-stop red-text" ng-show="isRecording" hm-tap="stopRecording($event)" ng-click="stopRecording($event)"></i>
+                <i class="icon-play green-text" ng-show="hasRecording && !isPlaying" hm-tap="playAudio($event)" ng-click="playAudio($event)"></i>
+                <i class="icon-stop red-text" ng-show="isPlaying" hm-tap="stopAudio($event)" ng-click="stopAudio($event)"></i>
+                <span ng-hide="hasRecording">{{recTime | number:1}}</span>
+                <span ng-show="hasRecording">
+                        <span ng-show="isPlaying">
+                            {{playTime | number:1 }}/</span>{{totalTime | number:1}}</span>
+            </div>
+        </div>
+        <div layout="column" layout-fill>
+            <b>Track details:</b>
+            <md-input-container>
+                <label>Track Title</label>
+                <input required name="title" ng-model="track.title" md-maxlength="70" />
+            </md-input-container>
+            <md-input-container>
+                <label>Description</label>
+                <textarea required name="description" ng-model="track.description" md-maxlength="420" />
+            </md-input-container>
+<!--             <md-input-container>
+                <label>Instrument</label>
+                <input required name="instrument" ng-model="track.instrument" md-maxlength="70" />
+            </md-input-container>
+            <md-input-container>
+                <label>Genre</label>
+                <input required name="genre" ng-model="track.genre" md-maxlength="70" />
+            </md-input-container> -->
+        </div>
+
+
+        <div layout="row" layout-fill layout-align="space-around center" ng-show="hasRecording">
+            <md-button class="md-raised md-primary blue-bg" hm-tap="saveTrack($event)" ng-click="saveTrack($event)">
+                Save Track
+            </md-button>
+            <md-button class="md-raised md-primary red-bg" hm-tap="clearRecording($event)" ng-click="clearRecording($event)">
+                Cancel
+            </md-button>
+        </div>
+    </div>
+</md-content>

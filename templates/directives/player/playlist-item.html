@@ -1,0 +1,28 @@
+<md-content ng-controller="PlaylistItemController">
+    <div layout="column" layout-margin>
+        <div class="playlist-item" layout="row" layout-fill>
+	        <div class="playlist-item-info" flex layout="column" layout-fill>
+	            <span><b>{{track.title}}</b></span>
+	            <span>{{track.length | tracktime }}</span>
+	        </div>
+	        <div class="playlist-item-controls" layout="column" layout-align="space-around end">
+	            <span class="icon-play green-text" ng-click="playNow($event,track.trackId)"></span>
+	            <span class="icon-plus blue-text" ng-click="addQueue($event,track.trackId)"></span>
+	            <!-- <span class="icon-tasks red-text" ng-click="gotoTrack($event,track.trackId)"></span> -->
+	        </div>
+	        <div class="playlist-item-controls" layout="column" layout-align="space-around end">
+                <span class="icon-cassette blue-text" ng-click="gotoTrack($event, person.uid)"></span>
+                <span class="icon-resizeverticalalt" ng-show="cardHidden" ng-click="showCard($event)"></span>
+                <span class="icon-uploadalt" ng-hide="cardHidden" ng-click="hideCard($event)"></span>
+	        </div>
+	        <div class="playlist-item-controls" layout="column" layout-align="space-around end">
+	        	<span class="icon-remove"></span>
+	        	<span class="icon-resize-vertical"></span>
+	        </div>
+        </div>
+
+    	<track-card class="track-card" track="track" ng-hide="cardHidden"></track-card>
+
+
+    </div>
+</div>

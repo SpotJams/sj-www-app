@@ -1,0 +1,39 @@
+<div ng-controller="FriendListController">
+    <md-tabs>
+        
+        <md-tab label="Friends">
+            <div class="profile-section md-whiteframe-z1">
+                <md-content layout="column" layout-fill>
+                    <div id="styles-title" class="section-title" layout="row">
+                        <span flex>Friends</span>
+                    </div>
+                    <div class="section-content" layout="column">
+                        <people-list people="data.friends"></people-list>
+                    </div>
+                </md-content>
+            </div>
+        </md-tab>
+        
+        <md-tab label="Requests">
+            <div class="profile-section md-whiteframe-z1">
+                <md-content layout="column" layout-fill>
+                    <div id="styles-title" class="section-title" layout="row">
+                        <span flex>Requests</span>
+                    </div>
+                    <div class="section-content" layout="column">
+                        <people-list people="data.incoming"></people-list>
+                    </div>
+                </md-content>
+            </div>
+            <div class="profile-section md-whiteframe-z1">
+                <md-content layout="column" layout-fill>
+                    <div id="styles-title" class="section-title" layout="row">
+                        <span flex>Pending</span>
+                    </div>
+                    <div class="section-content" layout="column">
+                        <people-list people="data.outgoing"></people-list>
+                    </div>
+                </md-content>
+            </div>
+        </md-tab>
+</div>

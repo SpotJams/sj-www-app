@@ -1,0 +1,8 @@
+<div class="people-list" ng-controller="PeopleListController">
+    <div layout="column" layout-fill>
+        <div id="people-list-header"></div>
+        <div id="people-list-items" ng-repeat="person in people">
+            <person-strip person="person"></person-strip>
+        </div>
+    </div>
+</div>

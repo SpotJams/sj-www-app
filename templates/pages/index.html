@@ -1,0 +1,11 @@
+<div id="landing-div" ng-controller="IndexController as indexCtrl" layout="column" layout-align="space-between center" layout-margin layout-fill layout-padding>
+    <img id="landing-logo" src="img/spotjams-logo.png" />
+    <i style="font-size:3em; font-style: normal; font-family: 'patua_oneregular';">
+    	<span class="blue-text">SpotJams</span>
+    </i>
+    <i style="font-size:1em; font-style: normal;"><span class="red-text">HUMANS TOGETHER FOR MUSIC</span></i>
+    <br><br>
+    <md-content class="md-padding" layout="column" layout-margin style="width: 50vw; font-size:1.2em;">
+            <md-button id="landing-login-button" hm-tap="indexCtrl.gotoLogin($event)" hm-press="indexCtrl.gotoLogin($event)" class="md-raised md-primary blue-bg" style="width: 50vw;">Get Jammin'</md-button>
+    </md-content>
+</div>
