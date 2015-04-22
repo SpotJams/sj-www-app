@@ -5,6 +5,8 @@
 
 window.app = window.app || {} ;         // there should only be one of these...
 
+window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+
 /*jslint browser:true, devel:true, white:true, vars:true */
 /*global $:false, intel:false, app:false, dev:false */
 /*global myEventHandler:false, cordova:false, device:false */
@@ -148,10 +150,6 @@ app.hideSplashScreen = function() {
 
     if( navigator.splashscreen && navigator.splashscreen.hide ) {   // Cordova API detected
         navigator.splashscreen.hide() ;
-    }
-    if( window.intel && intel.xdk && intel.xdk.device ) {           // Intel XDK device API detected, but...
-        if( intel.xdk.device.hideSplashScreen )                     // ...hideSplashScreen() is inside the base plugin
-            intel.xdk.device.hideSplashScreen() ;
     }
 
     app.consoleLog(fName, "exit") ;

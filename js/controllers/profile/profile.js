@@ -1,10 +1,15 @@
 angular.module("SpotJams")
 
 .controller("ProfileController",
-    function($scope, $rootScope, $location, $mdToast, profileService) {
+    function($scope, $rootScope, $state, $mdToast, $timeout, profileService) {
 
-        $scope.profile = profileService.get()
-        console.log("profile: ", $scope.profile)
+        $scope.profile = $rootScope.profile;
+        console.log("ProfileController: ", $scope.profile)
+        $rootScope.$on('$stateChangeEnd',
+            function(event, toState, toParams, fromState, fromParams){
+            $scope.profile = $rootScope.profile;
+            console.log("PROFILECONTROLLER: ",$scope.profile, $rootScope.profile);
+        });
 
         $rootScope.tempTitle = "Profile";
         $scope.$on("$destroy", function() {
@@ -20,7 +25,7 @@ angular.module("SpotJams")
             }
             console.log("gotoEditProfile - doing", event)
 
-            $location.path("/profile/setup");
+            $state.go("profile_setup");
         }
 
         $scope.gotoFriends = function(event) {
@@ -30,7 +35,7 @@ angular.module("SpotJams")
             }
             console.log("gotoFriends - doing", event)
 
-            $location.path("/profile/friends");
+            $state.go("profile_friends");
         }
 
         $scope.gotoFollows = function(event) {
@@ -40,7 +45,7 @@ angular.module("SpotJams")
             }
             console.log("gotoFollows - doing", event)
 
-            $location.path("/profile/follows");
+            $state.go("profile_follows");
         }
 
         $scope.gotoTracks = function(event) {
@@ -50,7 +55,7 @@ angular.module("SpotJams")
             }
             console.log("gotoTracks - doing", event)
 
-            $location.path("/profile/tracks");
+            $state.go("profile_tracks");
         }
 
         $scope.queueAllTracks = function($event) {

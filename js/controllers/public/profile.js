@@ -1,10 +1,11 @@
 angular.module("SpotJams")
 
 .controller("PublicProfileController",
-    function($scope, $rootScope, $routeParams, $location, $mdToast, profileService, socialService) {
+    function($scope, $rootScope, $stateParams, $state, $mdToast, profileService, socialService) {
         var self = $scope;
+        $scope.profile = {}
 
-        var pub_id = $routeParams.pub_id;
+        var pub_id = $stateParams.pub_id;
         console.log("ID: ", pub_id);
 
         profileService.loadFromServerId(pub_id,
@@ -33,7 +34,7 @@ angular.module("SpotJams")
             }
             console.log("gotoFriends - doing", event)
 
-            $location.path("/user/friends/" + pub_id);
+            $state.go("user_friends", pub_id);
         }
 
         $scope.gotoFollows = function(event) {
@@ -43,7 +44,7 @@ angular.module("SpotJams")
             }
             console.log("gotoFollowings - doing", event)
 
-            $location.path("/user/follows/" + pub_id);
+            $state.go("user_follows", pub_id);
         }
 
         $scope.gotoTracks = function(event) {
@@ -53,7 +54,7 @@ angular.module("SpotJams")
             }
             console.log("gotoTracks - doing", event)
 
-            $location.path("/user/tracks/" + pub_id);
+            $state.go("user_tracks", pub_id);
         }
 
 

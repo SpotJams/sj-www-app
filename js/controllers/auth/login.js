@@ -1,7 +1,7 @@
 angular.module("SpotJams")
 
 .controller("LoginController",
-    function($scope, $location, authService, profileService) {
+    function($scope, $state, authService, profileService) {
 
         // var decls
         var self = this;
@@ -13,7 +13,7 @@ angular.module("SpotJams")
             evt.preventDefault();
             console.log("gotoRegister - doing", evt)
 
-            $location.path("/register");
+            $state.go("register");
         }
 
         self.tryLogin = function(evt) {
@@ -34,7 +34,7 @@ angular.module("SpotJams")
                     profileService.set(profile);
                     profileService.save();
 
-                    $location.path("/profile/setup?next_page=%2Fmain");
+                    $state.go("main");
                 },
                 function(error) {
                     console.log("error logging in: ", error)

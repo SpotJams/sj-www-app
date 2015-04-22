@@ -72,12 +72,22 @@ angular.module('SpotJams')
         }
     );
 
-    $scope.doShowPlayer = function(doShow) {
+    $scope.doShowPlayer = function(event,doShow) {
+        // var pass = spotjams.clickbuster.onClick(event);
+        // if (!pass) {
+        //     return;
+        // }
+
         console.log("doShowPlayer: ", doShow);
         $scope.showPlayer = doShow;
         $scope.showList = false;
     }
-    $scope.doShowList = function(doShow) {
+    $scope.doShowList = function(event,doShow) {
+        // var pass = spotjams.clickbuster.onClick(event);
+        // if (!pass) {
+        //     return;
+        // }
+
         console.log("doShowList: ", doShow);
         $scope.showList = doShow;
     }

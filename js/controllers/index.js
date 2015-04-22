@@ -4,7 +4,12 @@ angular.module('SpotJams')
     function($rootScope, $scope, $location, authService, profileService) {
         var self = this;
 
-        document.addEventListener("deviceready", doInit, false);
+        console.log("IndexController")
+
+        // document.addEventListener("deviceready", doInit, false);
+        // angular.element(document).ready(function () {
+        //     doInit();
+        // });
 
         self.gotoLogin = function(evt) {
             // ngMaterial has issues with multiple click events being fired right now
@@ -16,7 +21,9 @@ angular.module('SpotJams')
 
         function doInit() {
             // create root SpotJams folder (should check)
-            createRootFolder();
+            console.log("GOT HERE 1")
+            // createRootFolder();
+ 
 
             // login with token if existant
             authService.loginToken(function(data) {

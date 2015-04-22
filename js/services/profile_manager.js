@@ -28,13 +28,20 @@ angular.module("SpotJams")
     }
 
     _instance.load = function() {
-        loadFromFile(function(profile) {
+        loadProfileFromDB( authService.uid(),
+        function(profile) {
             _instance._profile = profile;
-            authService.uid(_instance._profile.uid)
 
         }, function(error) {
             console.log("error loading profile: ", error);
         });
+
+        // loadFromFile(function(profile) {
+        //     _instance._profile = profile;
+
+        // }, function(error) {
+        //     console.log("error loading profile: ", error);
+        // });
     }
 
     _instance.loadFromServerId = loadFromServerId;
@@ -45,12 +52,19 @@ angular.module("SpotJams")
         // TODO check here for server copy last update time newer than local copy
 
 
-        saveToFile(_instance._profile, function success(data) {
-		        console.log("Local Save Profile: ", _instance._profile);
-        	},
-        	function(error){
-		        console.log("ERROR Local Save Profile: ", error);
-        	});
+        saveProfileToDB(_instance._profile, function success(data) {
+                console.log("Local Save Profile: ", _instance._profile);
+            },
+            function(error){
+                console.log("ERROR Local Save Profile: ", error);
+            });
+
+        // saveToFile(_instance._profile, function success(data) {
+        //         console.log("Local Save Profile: ", _instance._profile);
+        //     },
+        //     function(error){
+        //         console.log("ERROR Local Save Profile: ", error);
+        //     });
     }
 
     _instance.download = function(success_handle, error_handle) {
@@ -91,9 +105,22 @@ angular.module("SpotJams")
     }
 
     function getProfileFileEntry(doCreate, success_handle, error_handle) {
-        requestFileSystem(LocalFileSystem.PERSISTENT, 0, onSuccess, function(error) {
-            error_handle(error);
+
+        navigator.webkitPersistentStorage.requestQuota(1 * 1024 * 1024, function(grantedBytes) {
+            window.requestFileSystem(PERSISTENT, grantedBytes, onSuccess, function(error) {
+                console.log("Error occurred during request to file system pointer. Error code is: ", error);
+            });
+        }, function(e) {
+            console.log('Error', e);
         });
+
+        // requestFileSystem(window.PERSISTENT, 1*1024*1024 /*1MB*/, onSuccess, function(error) {
+        //     error_handle(error);
+        // });
+        // requestFileSystem(LocalFileSystem.PERSISTENT, 0, onSuccess, function(error) {
+        //     error_handle(error);
+        // });
+
 
         function onSuccess(fileSystem) {
             var directoryEntry = fileSystem.root;
@@ -142,6 +169,7 @@ angular.module("SpotJams")
         	function success(fileEntry) {
                 fileEntry.createWriter(function(writer) {
                     pretty = angular.toJson(profile, true);
+                    console.log("pretty: ", pretty);
                     writer.write(pretty);
                 }, function(error) {
                     return error;
@@ -149,7 +177,7 @@ angular.module("SpotJams")
 
             },
             function(error) {
-                console.log("Error occurred while opening profile. Error code is: " + error.code);
+                console.log("Error occurred while opening profile. Error is: ", error);
             });
     }
 
@@ -224,8 +252,57 @@ angular.module("SpotJams")
         })
     }
 
-    function CompareVersions() {
 
+    function loadProfileFromDB(uid, success_handle, error_handle) {
+        // var name = _instance._uid + "-token"
+        var name = uid + "-profile"
+        var lower = uid + "-profild"
+        var upper = uid + "-profilf"
+
+        console.log("loadProfileFromDB", name)
+
+        // DBCONN.get('user', {direction: sklad.DESC, limit: 10, offset: 5}, function(data) {
+        //     console.log("GOT HERE DBCONN RET", data)
+        // });
+
+        sklad.open(dbName, function (err, database) {
+            database.get('user', {
+                range: IDBKeyRange.bound(lower, higher, true, true),
+                limit: 1,
+                direction: sklad.DESC
+            }, function (err, records) {
+                if (err) {
+                    // check err.name to get the reason of error
+                    // err.message will also be useful
+                    error_handle(err)
+                }
+
+                console.log(records)
+
+                if (records.length > 0 && records[0].key && records[0].key == name) {
+                    success_handle(records[0].value)
+                }
+
+                // records in an array containing objects with structure:
+                // {
+                //     key: ...,
+                //     value: object1
+                // },
+                // ...
+            });
+        });
+    }
+
+    function saveProfileToDB(profile, success_handle, error_handle) {
+        var name = _instance._profile.uid + "-profile"
+        console.log("saveProfileToDB", name)
+        var data = sklad.keyValue(name, profile);
+        DBCONN.upsert('user', data, success_handle);
+    }
+
+    function removeProfileFromDB(success_handle, error_handle) {
+        var name = _instance._profile.uid + "-profile"
+        DBCONN.delete('user', name, success_handle);
     }
 
 

@@ -49,7 +49,8 @@
     }
     /*@-ms-viewport { user-zoom: zoom ; min-zoom: 100% ; max-zoom: 200% ; }   @viewport { user-zoom: zoom ; min-zoom: 100% ; max-zoom: 200% ; }*/
     </style>
-    
+     <link rel="shortcut icon" href="img/favicon.png">
+   
     <link rel="stylesheet" href="css/fonts/patua-one/stylesheet.css">
     <link rel="stylesheet" href="css/fonts/roboto_regular_macroman/stylesheet.css">
     <link rel="stylesheet" href="vendor/bower_components/angular-material/angular-material.min.css" />
@@ -80,9 +81,11 @@
                         {{ tempTitle || "SpotJams" }}
                     </span>
                     <span flex></span>
-                    <!-- <div class="yellow-bg" hm-tap="toolbarCtrl.toggleLeft($event)" ng-click="toolbarCtrl.toggleLeft($event)" style="height: 50px; width: 50px; margin-right: 5px;" layout="row" layout-align="center center">
-                        <i class="icon-search blue-text" style="padding-top:2px;"></i>
-                    </div> -->
+                    
+                    <div class="yellow-bg" hm-tap="bodyCtrl.audioPlayerSlide($event)" ng-click="bodyCtrl.audioPlayerSlide($event)" hm-doubletap="bodyCtrl.audioPlayerFull($event)" ng-dblclick="bodyCtrl.audioPlayerFull($event)" style="height: 40px; width: 50px; margin-right: 5px;" layout="row" layout-align="center center">
+                        <i class="icon-music blue-text" style="padding-top:2px;"></i>
+                    </div>
+                    
                 </div>
             </md-toolbar>
         </md-content>
@@ -147,13 +150,12 @@
             </md-sidenav>
         </div>
 
-        <div ng-view>
+        <div ui-view>
             <!-- Content is loaded from partials templates -->
         </div>
        
 
 
-        <div id="audio-player-menu-shim" hm-swipeup="bodyCtrl.audioPlayerSlide($event)"></div>
         <playlist></playlist>
         
     </div>
@@ -190,8 +192,7 @@
     <script src="vendor/bower_components/angular-animate/angular-animate.min.js"></script>
     <script src="vendor/bower_components/angular-aria/angular-aria.min.js"></script>
     <script src="vendor/bower_components/angular-material/angular-material.min.js"></script>
-    <script src="vendor/bower_components/angular-route/angular-route.min.js"></script>
-    <script src="vendor/bower_components/angular-resource/angular-resource.min.js"></script>
+    <script src="vendor/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
 
     <script src="vendor/bower_components/ryanmullins-angular-hammer/angular.hammer.min.js"></script>
 
@@ -201,12 +202,12 @@
 
     <script>
     less = {
-        env: 'development'
+        // env: 'development'
     };
     </script>
     <script src="vendor/bower_components/less/dist/less.min.js"></script>
     <script>
-    less.watch();
+    // less.watch();
     </script>
 
     <script src="cordova.js"></script>
@@ -216,6 +217,7 @@
     <script src="js/app.js"></script>
     <script src="js/routes.js"></script>
     <script src="js/filters.js"></script>
+    <script src="js/indexdb.js"></script>
 
 
     <script src="js/services/auth_manager.js"></script>

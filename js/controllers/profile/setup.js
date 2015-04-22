@@ -1,6 +1,6 @@
 angular.module("SpotJams")
     .controller("SetupController",
-        function($rootScope, $scope, $location, $mdDialog, $routeParams, authService, profileService, imageService) {
+        function($rootScope, $scope, $location, $mdDialog, $stateParams, authService, profileService, imageService) {
 
 
             // TODO, check if the version on the server is newer
@@ -11,7 +11,7 @@ angular.module("SpotJams")
             // just before posting
 
             var self = this;
-            self.next_page = $routeParams.next_page;
+            self.next_page = $stateParams.next_page;
             console.log("next_page", self.next_page);
 
             self.saving = 'icon-ok';

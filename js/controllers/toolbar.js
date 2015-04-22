@@ -1,7 +1,7 @@
 angular.module('SpotJams')
 
 
-.controller("BodyController", function($location, $scope, $mdSidenav, profileService) {
+.controller("BodyController", function($scope, $mdSidenav, profileService) {
     var self = this;
 
     self.leftMenuSlide = function(event) {
@@ -20,12 +20,23 @@ angular.module('SpotJams')
         }
 
         var plc = angular.element($('#playlist-container'))
-        plc.scope().doShowPlayer(true);
+        var shown = plc.scope().showPlayer
+        plc.scope().doShowPlayer(null, !shown);
+    };
+
+    self.audioPlayerFull = function(event) {
+        var pass = spotjams.clickbuster.onClick(event);
+        if (!pass) {
+            return;
+        }
+
+        var plc = angular.element($('#playlist-container'))
+        plc.scope().doShowList(null, true);
     };
 
 })
 
-.controller("ToolbarController", function($location, $scope, $mdSidenav) {
+.controller("ToolbarController", function($scope, $mdSidenav) {
     var self = this;
     self.toggleLeft = function(event) {
         var pass = spotjams.clickbuster.onClick(event);
@@ -37,7 +48,7 @@ angular.module('SpotJams')
     };
 })
 
-.controller('LeftMenuCtrl', function($location, $scope, $mdSidenav, authService) {
+.controller('LeftMenuCtrl', function($state, $scope, $mdSidenav, authService) {
     var self = this;
     self.closeLeft = function(event) {
         var pass = spotjams.clickbuster.onClick(event);
@@ -53,7 +64,7 @@ angular.module('SpotJams')
             return;
         }
         console.log("leftmenu - home: ");
-        $location.path("/main")
+        $state.go("main")
         $mdSidenav('left').close()
     };
     self.gotoDiscover = function(event) {
@@ -62,7 +73,7 @@ angular.module('SpotJams')
             return;
         }
         console.log("leftmenu - discover: ");
-        $location.path("/find/people")
+        $state.go("find_people")
         $mdSidenav('left').close()
 
     };
@@ -73,7 +84,7 @@ angular.module('SpotJams')
             return;
         }
         console.log("leftmenu - messages: ");
-        $location.path("/messages")
+        $state.go("messages")
         $mdSidenav('left').close()
 
     };
@@ -84,7 +95,7 @@ angular.module('SpotJams')
             return;
         }
         console.log("leftmenu - friends: ");
-        $location.path("/profile/friends")
+        $state.go("profile_friends")
         $mdSidenav('left').close()
 
     };
@@ -94,7 +105,7 @@ angular.module('SpotJams')
             return;
         }
         console.log("leftmenu - tracks: ");
-        $location.path("/profile/tracks")
+        $state.go("profile_tracks")
         $mdSidenav('left').close()
 
     };
@@ -104,7 +115,7 @@ angular.module('SpotJams')
             return;
         }
         console.log("leftmenu - profile: ");
-        $location.path("/profile/user")
+        $state.go("profile_user")
         $mdSidenav('left').close()
 
     };
@@ -114,7 +125,7 @@ angular.module('SpotJams')
             return;
         }
         console.log("leftmenu - tutorials: ");
-        $location.path("/tutorials")
+        $state.go("tutorials")
         $mdSidenav('left').close()
 
     };
@@ -124,7 +135,7 @@ angular.module('SpotJams')
             return;
         }
         console.log("leftmenu - settings: ");
-        $location.path("/settings")
+        $state.go("settings")
         $mdSidenav('left').close()
 
     };
@@ -136,11 +147,12 @@ angular.module('SpotJams')
         console.log("leftmenu - logout: ");
 
         authService.logout(function success() {
-            $location.path("/")
+            $state.go("index")
         }, function(error) {
             console.log("failed to logout: ", error);
             alert(error);
         });
+
 
         $mdSidenav('left').close()
 

@@ -80,8 +80,8 @@
         <md-content layout="column" layout-fill ng-controller="ProfileEditSectionController">
             <div id="styles-title" class="section-title" layout="row">
                 <span flex>Styles and genres</span>
-                <i class="icon-plus-sign" ng-show="!adding" ng-click="toggleInput(true,$event,'styles-title')"></i>
-                <i class="icon-minus-sign" ng-show="adding" ng-click="toggleInput(false,$event)"></i>
+                <i class="icon-plus-sign" ng-show="!adding" ng-click="toggleInput(true,$event,'styles-title')" hm-tap="toggleInput(true,$event,'styles-title')"></i>
+                <i class="icon-minus-sign" ng-show="adding" ng-click="toggleInput(false,$event)" hm-tap="toggleInput(false,$event)"></i>
             </div>
             <div class="section-input" ng-show="adding" >
                 <div ng-controller="AutocompleteGenreController as ctrl">
@@ -100,8 +100,8 @@
     <md-content class="profile-section md-whiteframe-z1" layout="column" layout-fill ng-controller="ProfileEditSectionController">
         <div id="instruments-title" class="section-title" layout="row">
             <span flex>Instruments</span>
-            <i class="icon-plus-sign" ng-show="!adding" ng-click="toggleInput(true,$event,'instruments-title')"></i>
-            <i class="icon-minus-sign" ng-show="adding" ng-click="toggleInput(false,$event)"></i>
+            <i class="icon-plus-sign" ng-show="!adding" ng-click="toggleInput(true,$event,'instruments-title')" hm-tap="toggleInput(true,$event,'instruments-title')"></i>
+            <i class="icon-minus-sign" ng-show="adding" ng-click="toggleInput(false,$event)" hm-tap="toggleInput(false,$event)"></i>
         </div>
         <div class="section-input" ng-show="adding">
             <div ng-controller="AutocompleteInstrController as ctrl">
@@ -128,8 +128,8 @@
     <md-content class="profile-section md-whiteframe-z1" layout="column" layout-fill ng-controller="ProfileEditSectionController">
         <div id="tracks-title" class="section-title" layout="row">
             <span flex>Tracks</span>
-            <i class="icon-plus-sign" ng-show="!adding" ng-click="toggleInput(true,$event,'tracks-title')"></i>
-            <i class="icon-minus-sign" ng-show="adding" ng-click="toggleInput(false,$event)"></i>
+            <i class="icon-plus-sign" ng-show="!adding" ng-click="toggleInput(true,$event,'tracks-title')" hm-tap="toggleInput(true,$event,'tracks-title')"></i>
+            <i class="icon-minus-sign" ng-show="adding" ng-click="toggleInput(false,$event)" hm-tap="toggleInput(false,$event)"></i>
         </div>
         <div class="section-input" ng-show="adding">
             <track-recorder track="'dummy_track'"></track-recorder>

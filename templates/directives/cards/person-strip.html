@@ -3,7 +3,7 @@
         
         <!-- Person Strip -->
         <div layout="row" layout-fill>
-            <div ng-click="gotoUser($event, person.uid)">
+            <div ng-click="gotoUser($event, person.uid)" hm-tap="gotoUser($event, person.uid)">
                 <img ng-src="{{person.thumbURL}}"></img>
             </div>
             <div flex layout="column" style="margin-left: 10px; text-align: left; font-size: 0.8em;">
@@ -24,9 +24,9 @@
                 </div>
             </div>
             <div class="person-strip-controls" layout="column" layout-align="space-around end">
-                <span class="icon-avatar blue-text" ng-click="gotoUser($event, person.uid)"></span>
-                <span class="icon-dropmenu" ng-show="cardHidden" ng-click="showCard($event)"></span>
-                <span class="icon-uploadalt" ng-hide="cardHidden" ng-click="hideCard($event)"></span>
+                <span class="icon-avatar blue-text" ng-click="gotoUser($event, person.uid)" hm-tap="gotoUser($event, person.uid)"></span>
+                <span class="icon-dropmenu" ng-show="cardHidden" ng-click="showCard($event)" hm-tap="showCard($event)"></span>
+                <span class="icon-uploadalt" ng-hide="cardHidden" ng-click="hideCard($event)" hm-tap="hideCard($event)"></span>
             </div> 
         </div>
         

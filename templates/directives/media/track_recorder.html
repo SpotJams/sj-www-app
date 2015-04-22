@@ -15,10 +15,10 @@
                 </div>
             </div>
             <div class="track-controls yellow-text blue-bg" flex="50" layout="column" layout-align="space-around center">
-                <i class="icon-record red-text" ng-hide="isRecording || hasRecording" hm-tap="startRecording($event)" ng-click="startRecording($event)"></i>
-                <i class="icon-stop red-text" ng-show="isRecording" hm-tap="stopRecording($event)" ng-click="stopRecording($event)"></i>
-                <i class="icon-play green-text" ng-show="hasRecording && !isPlaying" hm-tap="playAudio($event)" ng-click="playAudio($event)"></i>
-                <i class="icon-stop red-text" ng-show="isPlaying" hm-tap="stopAudio($event)" ng-click="stopAudio($event)"></i>
+                <md-button class="md-raised md-primary red-bg" ng-hide="isRecording || hasRecording" hm-tap="startRecording($event)" ng-click="startRecording($event)">Record</md-button>
+                <md-button class="md-raised md-primary red-bg" ng-show="isRecording" hm-tap="stopRecording($event)" ng-click="stopRecording($event)">Stop</md-button>
+                <md-button class="md-raised md-primary green-bg" ng-show="hasRecording && !isPlaying" hm-tap="playAudio($event)" ng-click="playAudio($event)">Play</md-button>
+                <md-button class="md-raised md-primary red-bg" ng-show="isPlaying" hm-tap="stopAudio($event)" ng-click="stopAudio($event)">Stop</md-button>
                 <span ng-hide="hasRecording">{{recTime | number:1}}</span>
                 <span ng-show="hasRecording">
                         <span ng-show="isPlaying">

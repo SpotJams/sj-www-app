@@ -91,7 +91,7 @@ angular.module("SpotJams")
         // save everything through the API
         // and get the url's in return
         
-        (_instance._image,
+        uploadToServer(_instance._image,
             function success(data) {
                 console.log("Remote Profile Image return: ", data);
                 // update image URLs
@@ -177,7 +177,7 @@ angular.module("SpotJams")
         return blob;
     }
 
-    function saveALLToServer(image, success_handle, error_handle) {
+    function uploadToServer(image, success_handle, error_handle) {
         console.log("Saving PROFILE image for: ", authService.uid())
 
         // image.thumb = b64toBlob(image.thumb, 'image/jpeg');

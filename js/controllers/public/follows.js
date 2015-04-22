@@ -1,9 +1,9 @@
 angular.module("SpotJams")
 
 .controller("PublicFollowsListController",
-    function($scope, $routeParams, socialService) {
+    function($scope, $stateParams, socialService) {
 
-        var pub_id = $routeParams.pub_id;
+        var pub_id = $stateParams.pub_id;
         console.log("ID: ", pub_id);
 
         var self = $scope;

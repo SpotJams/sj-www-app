@@ -55,7 +55,7 @@ spotjams.ui.FastButton.prototype.reset = function() {
 
 spotjams.clickbuster.preventGhostClick = function(x, y) {
   spotjams.clickbuster.coordinates.push(x, y);
-  window.setTimeout(spotjams.clickbuster.pop, 800);
+  window.setTimeout(spotjams.clickbuster.pop, 500);
 };
 
 spotjams.clickbuster.pop = function() {
@@ -81,9 +81,12 @@ spotjams.clickbuster.onClick = function(event) {
     var x = spotjams.clickbuster.coordinates[i];
     var y = spotjams.clickbuster.coordinates[i + 1];
     if (Math.abs(event.clientX - x) < 25 && Math.abs(event.clientY - y) < 25) {
-    // console.log("clickbuster - REJECT ");
-      event.stopPropagation();
-      event.preventDefault();
+      if (event.stopPropagation) {
+        event.stopPropagation();
+      }      
+      if (event.preventDefault) {
+        event.preventDefault();
+      }
       return false;
     }
   }
