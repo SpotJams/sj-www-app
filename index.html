@@ -26,23 +26,23 @@
     /* following three (cascaded) are equivalent to above three meta viewport statements */
     /* see http://www.quirksmode.org/blog/archives/2014/05/html5_dev_conf.html */
     /* see http://dev.w3.org/csswg/css-device-adapt/ */
-    
+
     @-ms-viewport {
         width: 100vw;
         min-zoom: 100%;
         zoom: 100%;
     }
-    
+
     @viewport {
         width: 100vw;
         min-zoom: 100% zoom: 100%;
     }
-    
+
     @-ms-viewport {
         user-zoom: fixed;
         min-zoom: 100%;
     }
-    
+
     @viewport {
         user-zoom: fixed;
         min-zoom: 100%;
@@ -50,7 +50,7 @@
     /*@-ms-viewport { user-zoom: zoom ; min-zoom: 100% ; max-zoom: 200% ; }   @viewport { user-zoom: zoom ; min-zoom: 100% ; max-zoom: 200% ; }*/
     </style>
      <link rel="shortcut icon" href="img/favicon.png">
-   
+
     <link rel="stylesheet" href="css/fonts/patua-one/stylesheet.css">
     <link rel="stylesheet" href="css/fonts/roboto_regular_macroman/stylesheet.css">
     <link rel="stylesheet" href="vendor/bower_components/angular-material/angular-material.min.css" />
@@ -81,11 +81,11 @@
                         {{ tempTitle || "SpotJams" }}
                     </span>
                     <span flex></span>
-                    
+
                     <div class="yellow-bg" hm-tap="bodyCtrl.audioPlayerSlide($event)" ng-click="bodyCtrl.audioPlayerSlide($event)" hm-doubletap="bodyCtrl.audioPlayerFull($event)" ng-dblclick="bodyCtrl.audioPlayerFull($event)" style="height: 40px; width: 50px; margin-right: 5px;" layout="row" layout-align="center center">
                         <i class="icon-music blue-text" style="padding-top:2px;"></i>
                     </div>
-                    
+
                 </div>
             </md-toolbar>
         </md-content>
@@ -99,7 +99,7 @@
                     </div>
                 </md-toolbar>
                 <md-content flex layout="column" layout-align="start start" style="font-size: 1.2em;">
-                    
+
                     <span class="left-menu-item" layout="row" ng-click="lmCtrl.gotoHome($event)" hm-tap="lmCtrl.gotoHome($event)" layout-align="start center">
                         <i class="icon-home blue-text" ></i>
                         Home
@@ -153,11 +153,11 @@
         <div ui-view>
             <!-- Content is loaded from partials templates -->
         </div>
-       
+
 
 
         <playlist></playlist>
-        
+
     </div>
 
 
@@ -175,7 +175,7 @@
     </script>
 
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
-    
+
     <script src="vendor/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="vendor/bower_components/jquery-ui/ui/minified/widget.min.js"></script>
     <script src="vendor/jquery-plugins/jquery.geocomplete.min.js"></script>
@@ -234,9 +234,9 @@
     <script src="js/directives/cards/track-card.js"></script>
     <script src="js/directives/cards/track-strip.js"></script>
     <script src="js/directives/lists/track-list.js"></script>
-    
-   
-    <script src="js/directives/player/playlist.js"></script> 
+
+
+    <script src="js/directives/player/playlist.js"></script>
 
     <script src="js/directives/media/track_recorder.js"></script>
     <script src="js/directives/media/track_player.js"></script>

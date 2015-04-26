@@ -26,6 +26,7 @@
     "less": "~2.4.0",
     "moment": "~2.9.0",
     "ryanmullins-angular-hammer": "~2.1.10",
-    "sklad": "~1.2.0"
+    "sklad": "~1.2.0",
+    "angular-ui-router": "~0.2.14"
   }
 }
