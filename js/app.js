@@ -61,49 +61,49 @@ angular.module('SpotJams', ['ui.router', 'ngMaterial', 'ngTouch', 'hmTouchEvents
 
 
 
-            $rootScope.$on('$stateChangeStart',
-			function(event, toState, toParams, fromState, fromParams){
-				var okState = (toState.name === "index" || toState.name === "login" || toState.name === "register")
+   //          $rootScope.$on('$stateChangeStart',
+			// function(event, toState, toParams, fromState, fromParams){
+			// 	var okState = (toState.name === "index" || toState.name === "login" || toState.name === "register")
 
-				STATE_TIMEOUT = 0;
-				COUNT_TIMEOUT = 0;
-				if (fromState.name === "" ) {
-					STATE_TIMEOUT = 100;
-				}
+			// 	STATE_TIMEOUT = 0;
+			// 	COUNT_TIMEOUT = 0;
+			// 	if (fromState.name === "" ) {
+			// 		STATE_TIMEOUT = 100;
+			// 	}
 
-		        var goo = function() {
-					if (!authService.authed() && !okState) {
-					    event.preventDefault();
-						console.log("GOT HERE RUNNNNNNN", COUNT_TIMEOUT, '\'' + fromState.name + '\'', toState.name)
-			        	if (COUNT_TIMEOUT > 2000) {
-			        		console.log("BROKE COUNT DURING AUTH")
-							if(!okState) {
-						    	$state.transitionTo("login")
-							}
-							return;
-			        	}
-			            var tmp = authService.uid()
-			            if( !tmp ) {
-			            	COUNT_TIMEOUT += STATE_TIMEOUT;
-			                $timeout(goo, STATE_TIMEOUT);
-			                return;
-			            }
-					} else { 
-						console.log("goo - Authed!", toState.name)
-					    if (toState.name === "login" || toState.name === "register") {
-					    	console.log("goo - ")
-						    event.preventDefault();
-					    	$state.transitionTo("main")
-					    	return;				    	
-					    }
-				    	if (COUNT_TIMEOUT > 0) {
-				    		$state.transitionTo(toState.name, toParams)
-				    		return;
-				    	}
-					}
-		        }
-		        goo();
-			})
+		 //        var goo = function(COUNT) {
+			// 		if (!authService.authed() && !okState) {
+			// 		    event.preventDefault();
+			// 			console.log("GOT HERE RUNNNNNNN", COUNT_TIMEOUT, '\'' + fromState.name + '\'', toState.name)
+			//         	if (COUNT > 2000) {
+			//         		console.log("BROKE COUNT DURING AUTH")
+			// 				if(!okState) {
+			// 			    	$state.transitionTo("login")
+			// 				}
+			// 				return;
+			//         	}
+			//             var tmp = authService.uid()
+			//             if( !tmp ) {
+			//             	COUNT += STATE_TIMEOUT;
+			//                 $timeout(function() { return goo(COUNT) }, STATE_TIMEOUT);
+			//                 return;
+			//             }
+			// 		} else { 
+			// 			console.log("goo - Authed!", toState.name)
+			// 		    if (toState.name === "login" || toState.name === "register") {
+			// 		    	console.log("goo - ")
+			// 			    event.preventDefault();
+			// 		    	$state.transitionTo("main")
+			// 		    	return;				    	
+			// 		    }
+			// 	    	if (COUNT > 0) {
+			// 	    		$state.transitionTo(toState.name, toParams)
+			// 	    		return;
+			// 	    	}
+			// 		}
+		 //        }
+		 //        goo(0);
+			// })
 
 
 })
