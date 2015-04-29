@@ -1,0 +1,37 @@
+{
+  "name": "sj-www-app",
+  "version": "0.0.1",
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-concat": "~0.5.1",
+    "grunt-contrib-jshint": "~0.11.2",
+    "grunt-contrib-sass": "~0.9.2",
+    "grunt-contrib-uglify": "~0.9.1",
+    "grunt-contrib-watch": "~0.6.3"
+  },
+  "description": "ERROR: No README data found!",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/verdverm/sj-landing"
+  },
+  "author": "spotjams",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/verdverm/sj-landing/issues"
+  },
+  "dependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-jshint": "~0.11.2",
+    "grunt-contrib-concat": "~0.5.1",
+    "grunt-contrib-sass": "~0.9.2",
+    "grunt-contrib-uglify": "~0.9.1",
+    "grunt-contrib-watch": "~0.6.1"
+  },
+  "keywords": [
+    "spotjams"
+  ]
+}

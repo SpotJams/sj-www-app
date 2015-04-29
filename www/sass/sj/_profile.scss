@@ -1,0 +1,137 @@
+@import "colors";
+
+.profile-section {
+	margin-bottom: 8px;
+	text-align: left;
+}
+
+.section-title {
+	color: white;
+	background-color: $blue;
+	font-size: 2em;
+	// box-shadow: none;
+	padding-left: 8px;
+	i {
+		padding: 4px;
+	}
+}
+
+
+.bottom-right-btn {
+	position: fixed;
+	right: 12px;
+	bottom: 12px;
+	z-index: 9999;
+	background-color: white;
+	font-size: 2.7em;
+
+	// padding-top: -1.0em;
+	padding-top: 0.233em;
+
+	text-align: center;
+	// vertical-align: center;
+
+
+	// span {
+	// 	margin-top: -2.0em;
+	// 	margin-left: -0.1em; 
+	// }
+	// box-shadow: 0px 3px 4px 6px #ccc;
+	// background-color: transparent;
+	// background: transparent;
+}
+
+.section-input {
+	padding: 8px;
+   -moz-box-shadow:    inset 0 0 16px lighten($green, 5%);
+   -webkit-box-shadow: inset 0 0 16px lighten($green, 5%);
+   box-shadow:         inset 0 0 16px lighten($green, 5%);
+	// background-color: lighten($green, 40%);
+}
+.section-input {
+    -webkit-transition: height 0.15s linear;
+    -moz-transition: height 0.15s linear;
+    -ms-transition: height 0.15s linear;
+    -o-transition: height 0.15s linear;
+	transition:height 0.15s linear;
+	// overflow:hidden;
+	position:relative;
+    border-bottom: solid 1px #eee;
+    max-height: 600px;
+}
+
+.section-input.ng-hide {
+    -webkit-transition: height 0.15s linear;
+    -moz-transition: height 0.15s linear;
+    -ms-transition: height 0.15s linear;
+    -o-transition: height 0.15s linear;
+	transition:height 0.15s linear;
+	// overflow:hidden;
+	position:relative;
+    border-bottom: solid 1px #eee;
+    max-height: 0px;
+}
+
+.section-input.ng-hide-add,
+.section-input.ng-hide-remove {
+
+    display:block!important;
+}
+
+.section-input.ng-hide-add{
+    -webkit-transition: height 0.15s linear;
+    -moz-transition: height 0.15s linear;
+    -ms-transition: height 0.15s linear;
+    -o-transition: height 0.15s linear;
+	transition:height 0.15s linear;
+    // height: 120px;
+    // opacity: 1;
+}
+.section-input.ng-hide-remove {
+    -webkit-transition: height 0.15s linear;
+    -moz-transition: height 0.15s linear;
+    -ms-transition: height 0.15s linear;
+    -o-transition: height 0.15s linear;
+	transition:height 0.15s linear;
+    // height: 0px;
+    // opacity: 0;
+}
+
+
+
+.section-content {
+	margin: 8px;
+	.section-item, p {
+		border-bottom: solid 1px #eee;
+	}
+}
+
+
+
+
+
+
+#profile-owner-view {
+
+}
+
+#profile-setup-view {
+
+}
+
+
+#autocompletes {
+    color: #000;
+    md-autocomplete {
+        margin-bottom: 8px;
+    }
+}
+
+#alert-div md-dialog,
+#alert-div md-content {
+    /*color: #111;*/
+    
+    color: #2599CC !important;
+    background-color: #555 !important;
+}
+
