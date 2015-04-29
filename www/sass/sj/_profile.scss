@@ -7,7 +7,7 @@
 
 .section-title {
 	color: white;
-	background-color: $blue;
+	background-color: $sj-blue;
 	font-size: 2em;
 	// box-shadow: none;
 	padding-left: 8px;
@@ -43,10 +43,10 @@
 
 .section-input {
 	padding: 8px;
-   -moz-box-shadow:    inset 0 0 16px lighten($green, 5%);
-   -webkit-box-shadow: inset 0 0 16px lighten($green, 5%);
-   box-shadow:         inset 0 0 16px lighten($green, 5%);
-	// background-color: lighten($green, 40%);
+   -moz-box-shadow:    inset 0 0 16px lighten($sj-green, 5%);
+   -webkit-box-shadow: inset 0 0 16px lighten($sj-green, 5%);
+   box-shadow:         inset 0 0 16px lighten($sj-green, 5%);
+	// background-color: lighten($sj-green, 40%);
 }
 .section-input {
     -webkit-transition: height 0.15s linear;

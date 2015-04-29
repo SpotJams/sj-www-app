@@ -80,7 +80,7 @@ module.exports = function(grunt) {
       },
 
       sass: {
-        files: 'scss/**/*.scss',
+        files: 'www/sass/**/*.scss',
         tasks: ['sass']
       }
     }

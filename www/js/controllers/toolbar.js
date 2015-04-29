@@ -1,7 +1,7 @@
 angular.module('SpotJams')
 
 
-.controller("BodyController", function($scope, $mdSidenav, profileService) {
+.controller("BodyController", function($scope, profileService) {
     var self = this;
 
     self.leftMenuSlide = function(event) {

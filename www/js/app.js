@@ -1,9 +1,9 @@
 
-var HOMEBASE = "http://api.spotjams.com"
-// var HOMEBASE = "http://spotjams-api.appspot.com"
+// var HOMEBASE = "http://api.spotjams.com"
+var HOMEBASE = "http://tony.spotjams.com:9090"
 
 
-angular.module('SpotJams', ['ui.router', 'ngMaterial', 'ngTouch', 'hmTouchEvents', 'angulartics', 'angulartics.scroll', 'angulartics.google.analytics'])
+angular.module('SpotJams', ['ui.router', 'ngTouch', 'hmTouchEvents', 'angulartics', 'angulartics.scroll', 'angulartics.google.analytics'])
 
 .filter('unsafe', function($sce) { return $sce.trustAsHtml; })
 .filter('unsaferesource', function($sce) { return $sce.trustAsResourceUrl; })
@@ -12,6 +12,17 @@ angular.module('SpotJams', ['ui.router', 'ngMaterial', 'ngTouch', 'hmTouchEvents
 	$httpProvider.defaults.useXDomain = true;
     $httpProvider.defaults.withCredentials = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
+})
+.run( function($rootScope, $state, $timeout, authService, profileService) {
+
+  $('.button-collapse').sideNav({
+      menuWidth: 300, // Default is 240
+      edge: 'left', // Choose the horizontal origin
+      closeOnClick: true // Closes side-nav on <a> clicks, useful for Angular/Meteor
+    }
+  );
+
 
 })
 //

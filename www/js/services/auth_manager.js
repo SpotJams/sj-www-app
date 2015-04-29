@@ -47,6 +47,7 @@ angular.module("SpotJams")
     }
 
     _instance.loginCreds = function(username, password, success_handle, error_handle) {
+        console.log("loginCreds")
         $http({
                 'method': "POST",
                 'url': HOMEBASE + "/auth/login",
