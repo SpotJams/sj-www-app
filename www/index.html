@@ -24,7 +24,7 @@
             <div class="nav-wrapper">
                 <a ng-href="/" class="brand-logo sj-blue-text" style="font-family: 'patua_oneregular';">{{ tempTitle || "SpotJams" }}</a>
                 <a href="#" data-activates="mobile-demo" class="button-collapse sj-blue-text"><i class="mdi-navigation-menu"></i></a>
-                <i class="sj-blue-text mdi-image-audiotrack right-align"></i>
+                <i class="sj-blue-text mdi-image-audiotrack right-align" hm-tap="bodyCtrl.audioPlayerSlide($event)" ng-click="bodyCtrl.audioPlayerSlide($event)" hm-doubletap="bodyCtrl.audioPlayerFull($event)" ng-dblclick="bodyCtrl.audioPlayerFull($event)"></i>
                 
                 <ul class="right hide-on-med-and-down">
                     <li><a href="theapp.html">The App</a></li>
@@ -174,7 +174,7 @@
 
     <!-- for your event code, see README and file comments for details -->
     <script src="js/click.js"></script>
-    <script src="js/app.js"></script>
+    <script src="js/webapp.js"></script>
     <script src="js/routes.js"></script>
     <script src="js/filters.js"></script>
     <script src="js/indexdb.js"></script>
@@ -183,6 +183,7 @@
     <script src="js/services/auth_manager.js"></script>
     <script src="js/services/image_manager.js"></script>
     <script src="js/services/track_manager.js"></script>
+    <script src="js/services/playlist_manager.js"></script>
     <script src="js/services/profile_manager.js"></script>
     <script src="js/services/social_manager.js"></script>
 

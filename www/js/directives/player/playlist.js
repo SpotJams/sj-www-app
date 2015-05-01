@@ -10,7 +10,7 @@ angular.module('SpotJams')
     }
 })
 
-.controller("PlaylistController", function($scope, $sce, trackService) {
+.controller("PlaylistController", function($scope, $sce, playlistService, trackService) {
     var ctrl = $scope;
 
     ctrl.playing = false;
@@ -20,57 +20,76 @@ angular.module('SpotJams')
 
     ctrl.currentIndex = 0;
 
-    $scope.$watch(
-        function(scope) {
-            return scope.tracks
-        },
-        function(newValue, oldValue) {
-            ctrl.tracks = newValue;
 
-            console.log("TrackList Changed: ", ctrl.tracks, oldValue);
-            if (ctrl.tracks && ctrl.tracks.length > 0) {
-                ctrl.currentTrack = ctrl.tracks[ctrl.currentIndex];
-            }
-        }
-    );
+    // ctrl.initWatchers = function() {
+        
+        $scope.$watch(
+            function(scope) {
+                return playlistService.get();
+            },
+            function(newValue, oldValue) {
+                ctrl.tracks = newValue;
 
-    $scope.$watch(
-        function(scope) {
-            return scope.currentIndex
-        },
-        function(newValue, oldValue) {
-
-            console.log("New Current Index: ", ctrl.currentIndex);
-            if (ctrl.tracks && ctrl.tracks.length > 0) {
-                // ctrl.currentIndex = newValue;
-                if (newValue < 0) {
-                    ctrl.currentIndex = ctrl.tracks.length - 1;
+                console.log("Playlist Changed: ", ctrl.tracks, oldValue);
+                if (ctrl.tracks && ctrl.tracks.length > 0) {
+                    ctrl.currentTrack = ctrl.tracks[ctrl.currentIndex];
                 }
-                if (newValue >= ctrl.tracks.length) {
-                    ctrl.currentIndex = 0;
+            }
+        );
+
+        $scope.$watch(
+            function(scope) {
+                return scope.tracks
+            },
+            function(newValue, oldValue) {
+                ctrl.tracks = newValue;
+
+                console.log("TrackList Changed: ", ctrl.tracks, oldValue);
+                if (ctrl.tracks && ctrl.tracks.length > 0) {
+                    ctrl.currentTrack = ctrl.tracks[ctrl.currentIndex];
+                }
+            }
+        );
+
+        $scope.$watch(
+            function(scope) {
+                return scope.currentIndex
+            },
+            function(newValue, oldValue) {
+
+                console.log("New Current Index: ", ctrl.currentIndex);
+                if (ctrl.tracks && ctrl.tracks.length > 0) {
+                    // ctrl.currentIndex = newValue;
+                    if (newValue < 0) {
+                        ctrl.currentIndex = ctrl.tracks.length - 1;
+                    }
+                    if (newValue >= ctrl.tracks.length) {
+                        ctrl.currentIndex = 0;
+                    }
+
+                    ctrl.currentTrack = ctrl.tracks[ctrl.currentIndex];
                 }
 
-                ctrl.currentTrack = ctrl.tracks[ctrl.currentIndex];
             }
+        );
 
-        }
-    );
-
-    $scope.$watch(
-        function(scope) {
-            return scope.currentTrack
-        },
-        function(newValue, oldValue) {
-            ctrl.currentTrack = newValue;
-            console.log("New Current Track: ", ctrl.currentTrack);
-            ctrl.playTime = 0;
-            ctrl.playedContent = 0;
-            if (ctrl.currentTrack) {
-                ctrl.totalTime = ctrl.currentTrack.length;
-                ctrl.loadAudio(ctrl.currentTrack.trackId)
+        $scope.$watch(
+            function(scope) {
+                return scope.currentTrack
+            },
+            function(newValue, oldValue) {
+                ctrl.currentTrack = newValue;
+                console.log("New Current Track: ", ctrl.currentTrack);
+                ctrl.playTime = 0;
+                ctrl.playedContent = 0;
+                if (ctrl.currentTrack) {
+                    ctrl.totalTime = ctrl.currentTrack.length;
+                    ctrl.loadAudio(ctrl.currentTrack.trackId)
+                }
             }
-        }
-    );
+        );
+
+    // }
 
     $scope.doShowPlayer = function(event,doShow) {
         // var pass = spotjams.clickbuster.onClick(event);
@@ -78,7 +97,9 @@ angular.module('SpotJams')
         //     return;
         // }
 
-        console.log("doShowPlayer: ", doShow);
+        // event.preventDefault();
+
+        console.log("doShowPlayer: ", doShow, event);
         $scope.showPlayer = doShow;
         $scope.showList = false;
     }
@@ -87,8 +108,9 @@ angular.module('SpotJams')
         // if (!pass) {
         //     return;
         // }
+        // event.preventDefault();
 
-        console.log("doShowList: ", doShow);
+        console.log("doShowList: ", doShow, event);
         $scope.showList = doShow;
     }
 

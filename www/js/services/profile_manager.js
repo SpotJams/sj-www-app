@@ -1,8 +1,6 @@
 angular.module("SpotJams")
 
-.factory('profileService', function($http, authService) {
-
-    var _filename = "SpotJams/profile.json"
+.factory('profileService', function($http, $q, authService) {
 
     var _instance = {}
     _instance._profile = {}
@@ -23,286 +21,236 @@ angular.module("SpotJams")
         _instance._profile = profile;
     }
 
-    _instance.updateDiff = function(profile) {
-        // ...?
-    }
+    _instance.loadSelf = function() {
+        var defer = $q.defer();
 
-    _instance.load = function() {
-        loadProfileFromDB( authService.uid(),
-        function(profile) {
-            _instance._profile = profile;
+        var uid = authService.uid()
+        var dbP  = loadProfileFromDB(uid);
+        var srvP = loadPrivateProfileFromServer(uid);
 
-        }, function(error) {
+        $q.all([dbP,srvP])
+        .then(function(result) {
+            var profiles = [];
+            angular.forEach(result, function(response) {
+                profiles.push(response);
+              });
+            _instance._profile = profiles[0];
+            defer.resolve(profiles);
+        })
+        .catch(function(error) {
             console.log("error loading profile: ", error);
+            defer.reject(error);
         });
 
-        // loadFromFile(function(profile) {
-        //     _instance._profile = profile;
-
-        // }, function(error) {
-        //     console.log("error loading profile: ", error);
-        // });
+        return defer.promise
     }
 
-    _instance.loadFromServerId = loadFromServerId;
+    _instance.loadPublic = function(uid) {
+        console.log("LOADING USER PROFILE")
+        var defer = $q.defer();
+
+        var dbP  = loadProfileFromDB(uid);
+        var srvP = loadPublicProfileFromServer(uid);
+
+        $q.all([dbP,srvP])
+        .then(function(result) {
+            var profiles = [];
+            angular.forEach(result, function(response) {
+                profiles.push(response);
+              });
+
+
+            /// TODO check profile last updated times and do appropriate shit
+            _instance._profile = profiles[0];
+            defer.resolve(profiles);
+        })
+        .catch(function(error) {
+            console.log("error loading profile: ", error);
+            defer.reject(error);
+        });
+
+        return defer.promise
+    }
 
     _instance.save = function() {
-        
+        console.log("Saving user profile")
 
-        // TODO check here for server copy last update time newer than local copy
+        var defer = $q.defer();
 
+        var profile = _instance._profile;
 
-        saveProfileToDB(_instance._profile, function success(data) {
-                console.log("Local Save Profile: ", _instance._profile);
-            },
-            function(error){
-                console.log("ERROR Local Save Profile: ", error);
-            });
+        var dbP  = saveProfileToDB(profile);
+        var srvP = saveProfileToServer(profile);
 
-        // saveToFile(_instance._profile, function success(data) {
-        //         console.log("Local Save Profile: ", _instance._profile);
-        //     },
-        //     function(error){
-        //         console.log("ERROR Local Save Profile: ", error);
-        //     });
-    }
-
-    _instance.download = function(success_handle, error_handle) {
-        loadFromServer(function(data) {
-            _instance._profile = data.profile;
-            if (success_handle) {
-	            success_handle(data.profile);
-            }
-        }, function(error) {
-            console.log("error downloading profile: ", error);
-            if (error_handle){
-	            error_handle(error);
-            }
-        });
-    }
-
-    _instance.upload = function(success_handle, error_handle) {
-        
-
-        // TODO check here for server copy last update time newer than local copy
-
-
-    	_instance.save(); // ???
-        saveToServer(_instance._profile,
-        	function success(data) {
-        		// ???? _instance._profile = data.profile;
-		        console.log("Remote Save Profile: ", _instance._profile);
-        	if (success_handle) {
-                success_handle(data);
-            }
-        },
-        	function(error){
-		        console.log("ERROR Remote Save Profile: ", error);
-         if (error_handle){
-                error_handle(error);
-            }
-           	});
-    }
-
-    function getProfileFileEntry(doCreate, success_handle, error_handle) {
-
-        navigator.webkitPersistentStorage.requestQuota(1 * 1024 * 1024, function(grantedBytes) {
-            window.requestFileSystem(PERSISTENT, grantedBytes, onSuccess, function(error) {
-                console.log("Error occurred during request to file system pointer. Error code is: ", error);
-            });
-        }, function(e) {
-            console.log('Error', e);
+        $q.all([dbP,srvP])
+        .then(function(result) {
+            console.log("profile saved")
+            defer.resolve("success")
+        })
+        .catch(function(error) {
+            console.log("error loading profile: ", error);
+            defer.reject(error);
         });
 
-        // requestFileSystem(window.PERSISTENT, 1*1024*1024 /*1MB*/, onSuccess, function(error) {
-        //     error_handle(error);
-        // });
-        // requestFileSystem(LocalFileSystem.PERSISTENT, 0, onSuccess, function(error) {
-        //     error_handle(error);
-        // });
-
-
-        function onSuccess(fileSystem) {
-            var directoryEntry = fileSystem.root;
-
-            directoryEntry.getDirectory("SpotJams", {
-                create: true,
-                exclusive: false
-            }, function() {}, function(error) {
-                error_handle(error);
-            })
-
-            directoryEntry.getFile(_filename, {
-                create: doCreate,
-                exclusive: false
-            }, function(fileEntry) {
-                success_handle(fileEntry);
-            }, function(error) {
-                error_handle(error);
-            });
-        }
+        return defer.promise;
     }
 
-    function loadFromFile(success_handle, error_handle) {
-        getProfileFileEntry(false, function(fileEntry) {
+    function loadPublicProfileFromServer(id) {
+        console.log("loadFromServerId: ", id)
+        var defer = $q.defer()
 
-            fileEntry.file(function(file) {
-                var reader = new FileReader();
-                reader.onloadend = function(evt) {
-                    var profile_str = evt.target.result;
-                    profile = angular.fromJson(profile_str);
-                    console.log("User Profile: ", profile)
-                    success_handle(profile);
-                };
-                reader.readAsText(file);
-
-            }, function(error) {
-                error_handle(error);
-            });
-        }, function(error) {
-            error_handle(error);
-        });
-    }
-
-    function saveToFile(profile, success_handle, error_handle) {
-        getProfileFileEntry(true, 
-        	function success(fileEntry) {
-                fileEntry.createWriter(function(writer) {
-                    pretty = angular.toJson(profile, true);
-                    console.log("pretty: ", pretty);
-                    writer.write(pretty);
-                }, function(error) {
-                    return error;
-                });
-
-            },
-            function(error) {
-                console.log("Error occurred while opening profile. Error is: ", error);
-            });
-    }
-
-    function loadFromServer(success_handle, error_handle) {
-        $http({
-            'method': "GET",
-            "url": HOMEBASE + "/api/profile/" + _instance._profile.uid,
-            'headers': {
-                'Authorization': 'Bearer ' + authService.token(),
-            },
-        })
-
-        .success(function(data, status, headers, config) {
-            // console.log(data)
-            if (data === undefined || data.error !== undefined) {
-                error_handle(data.error);
-            } else {
-                success_handle(data);
-            }
-        })
-
-        .error(function(data, status, headers, config) {
-            error_handle(data.error);
-        })
-    }
-
-    function loadFromServerId(id,success_handle, error_handle) {
         $http({
             'method': "GET",
             "url": HOMEBASE + "/api/user/profile/" + id,
-            'headers': {
-                'Authorization': 'Bearer ' + authService.token(),
-            },
         })
 
         .success(function(data, status, headers, config) {
             // console.log(data)
             if (data === undefined || data.error !== undefined) {
-                error_handle(data.error);
+                defer.reject(data.error);
             } else {
-                success_handle(data);
+                defer.resolve(data);
             }
         })
 
         .error(function(data, status, headers, config) {
-            error_handle(data.error);
+            defer.reject(data.error);
         })
+
+        return defer.promise
     }
 
-    function saveToServer(profile, success_handle, error_handle) {
+    function loadPrivateProfileFromServer(id) {
+        console.log("loadProfileFromServer: ", id)
+        var defer = $q.defer()
+
+        $http({
+            'method': "GET",
+            "url": HOMEBASE + "/api/profile/" + id,
+        })
+
+        .success(function(data, status, headers, config) {
+            // console.log(data)
+            if (data === undefined || data.error !== undefined) {
+                defer.reject(data.error);
+            } else {
+                defer.resolve(data);
+            }
+        })
+
+        .error(function(data, status, headers, config) {
+            defer.reject(data.error);
+        })
+
+        return defer.promise
+    }
+
+    function saveProfileToServer(profile) {
+        console.log("saveProfileToServer")
+        var defer = $q.defer();
 
         $http({
             'method': "POST",
             "url": HOMEBASE + "/api/profile/" + _instance._profile.uid,
-            'headers': {
-                'Authorization': 'Bearer ' + authService.token(),
-            },
             "data": profile,
         })
 
         .success(function(data, status, headers, config) {
             // console.log(data)
             if (data === undefined || data.error !== undefined) {
-                error_handle(data.error);
+                defer.reject(data.error);
             } else {
-                success_handle(data);
+                defer.resolve(data);
             }
         })
 
         .error(function(data, status, headers, config) {
-            error_handle(data.error);
+            defer.reject(data.error);
         })
+
+        return defer.promise
     }
 
 
-    function loadProfileFromDB(uid, success_handle, error_handle) {
-        // var name = _instance._uid + "-token"
+    function loadProfileFromDB(uid) {
+        console.log("loadProfileFromDB", uid)
+        var defer = $q.defer()
+        
         var name = uid + "-profile"
         var lower = uid + "-profild"
         var upper = uid + "-profilf"
 
-        console.log("loadProfileFromDB", name)
+        sklad.open(dbName, function(err, conn) {
+            if (err) {
+                console.log("reject: ", err)
+                defer.reject(err);
+            }
 
-        // DBCONN.get('user', {direction: sklad.DESC, limit: 10, offset: 5}, function(data) {
-        //     console.log("GOT HERE DBCONN RET", data)
-        // });
-
-        sklad.open(dbName, function (err, database) {
-            database.get('user', {
-                range: IDBKeyRange.bound(lower, higher, true, true),
+            conn.get('user', {
+                range: IDBKeyRange.bound(lower, upper, true, true),
                 limit: 1,
                 direction: sklad.DESC
-            }, function (err, records) {
+            }, function(err, records) {
                 if (err) {
-                    // check err.name to get the reason of error
-                    // err.message will also be useful
-                    error_handle(err)
+                    console.log("reject: ", err)
+                    defer.reject(err);
+                    return
                 }
-
-                console.log(records)
 
                 if (records.length > 0 && records[0].key && records[0].key == name) {
-                    success_handle(records[0].value)
+                    console.log("db resolve profile");
+                    defer.resolve(records[0].value)
+                } else {
+                    console.log("reject: ", "profile not found")
+                    defer.reject("profile not found locally");
                 }
-
-                // records in an array containing objects with structure:
-                // {
-                //     key: ...,
-                //     value: object1
-                // },
-                // ...
             });
         });
+
+        return defer.promise;
     }
 
-    function saveProfileToDB(profile, success_handle, error_handle) {
+    function saveProfileToDB(profile) {
+        console.log("saveProfileToDB")
+        var defer = $q.defer()
+
         var name = _instance._profile.uid + "-profile"
-        console.log("saveProfileToDB", name)
         var data = sklad.keyValue(name, profile);
-        DBCONN.upsert('user', data, success_handle);
+
+        sklad.open(dbName, function(err, conn) {
+            if (err) {
+                defer.reject(err);
+            }
+            conn.upsert('user', data, function(err, key) {
+                if (err) {
+                    defer.reject(err);
+                }
+                defer.resolve("success: " + key);
+            });
+        });
+
+        return defer.promise;    
     }
 
-    function removeProfileFromDB(success_handle, error_handle) {
-        var name = _instance._profile.uid + "-profile"
-        DBCONN.delete('user', name, success_handle);
+    function removeProfileFromDB(uid) {
+        console.log("removeProfileFromDB")
+        var defer = $q.defer()
+
+        var name = uid + "-profile"
+
+        sklad.open(dbName, function(err, conn) {
+            if (err) {
+                defer.reject(err);
+            }
+            conn.delete('user', name, function(err) {
+                if (err) {
+                    defer.reject(err);
+                }
+                defer.resolve("success");
+            });
+        });
+
+        return defer.promise;
     }
 
 

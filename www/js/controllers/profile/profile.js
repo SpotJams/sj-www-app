@@ -1,15 +1,26 @@
 angular.module("SpotJams")
 
 .controller("ProfileController",
-    function($scope, $rootScope, $state, $mdToast, $timeout, profileService) {
+    function($scope, $rootScope, $state, $timeout, profileService) {
 
-        $scope.profile = $rootScope.profile;
+        // This is to wait on the load of the profile if this is the first page we visit
         console.log("ProfileController: ", $scope.profile)
-        $rootScope.$on('$stateChangeEnd',
-            function(event, toState, toParams, fromState, fromParams){
-            $scope.profile = $rootScope.profile;
-            console.log("PROFILECONTROLLER: ",$scope.profile, $rootScope.profile);
-        });
+        var tmp = profileService.get().uid
+        if (tmp == undefined) {
+            var TIMEOUT = 100;
+            var foo = function() {
+                var tmp = profileService.get().uid
+                console.log("profile: ", $scope.profile)
+                if( !tmp ) {
+                    $timeout(foo, TIMEOUT);
+                } else {
+                    $scope.profile = profileService.get()
+                }
+            }
+            foo();
+        } else {
+            $scope.profile = profileService.get();
+        }
 
         $rootScope.tempTitle = "Profile";
         $scope.$on("$destroy", function() {
@@ -69,10 +80,10 @@ angular.module("SpotJams")
             var plc = angular.element($('#playlist-container'))
             plc.scope().addTrackListBack($scope.profile.tracks);
 
-            $mdToast.show(
-                $mdToast.simple()
-                .content('Queuing ' + $scope.profile.tracks.length + " tracks.")
-            );
+            // $mdToast.show(
+            //     $mdToast.simple()
+            //     .content('Queuing ' + $scope.profile.tracks.length + " tracks.")
+            // );
         }
 
         $scope.playeAllTracks = function($event) {
@@ -86,10 +97,10 @@ angular.module("SpotJams")
             var plc = angular.element($('#playlist-container'))
             plc.scope().addTrackListFrontPlay($scope.profile.tracks);
 
-            $mdToast.show(
-                $mdToast.simple()
-                .content('Playing ' + $scope.profile.tracks.length + " tracks.")
-            );
+            // $mdToast.show(
+            //     $mdToast.simple()
+            //     .content('Playing ' + $scope.profile.tracks.length + " tracks.")
+            // );
         }
 
     }

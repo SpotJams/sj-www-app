@@ -72,3 +72,12 @@
     height: 18px;
     background: green;
 }
+
+.hidden-submit {
+    border: 0 none;
+    height: 0;
+    width: 0;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}

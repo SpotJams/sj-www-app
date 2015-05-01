@@ -1,13 +1,13 @@
 <div id="playlist-container" ng-controller="PlaylistController" ng-class="{ 'show-player': showPlayer, 'show-list': showList }">
     <div layout="column" id="playlist-player-container" hm-swipeup="doShowList($event,true)" hm-swipedown="doShowPlayer($event,false)">
-        <span id="closeButton" class="icon-remove red-text" ng-click="doShowPlayer($event,false)" hm-tap="doShowPlayer($event,false)"></span>
+        <i id="closeButton" class="mdi-content-clear red-text" ng-click="doShowPlayer($event,false)" hm-tap="doShowPlayer($event,false)"></i>
         <audio id="music" preload="true" src="">
         </audio>
         <div layout="row" layout-fill layout-align="space-around center">
             <span id="prevButton" class="icon-previous" ng-click="prev($event)" hm-tap="prev($event)"></span>
             
-            <span class="icon-play green-text" ng-click="play($event)" ng-hide="playing" hm-tap="play($event)"></span>
-            <span class="icon-pause yellow-text" ng-click="pause($event)" ng-show="playing" hm-tap="pause($event)"></span>
+            <span class="mdi-av-play-circle-outline green-text" ng-click="play($event)" ng-hide="playing" hm-tap="play($event)"></span>
+            <span class="mdi-av-pause-circle-outline yellow-text" ng-click="pause($event)" ng-show="playing" hm-tap="pause($event)"></span>
             <div flex layout="column">
 	            <div layout="row" layout-align="space-between end">
 	                <span flex="50" class="current-track-title"><b>{{currentTrack.title}}</b></span>
@@ -28,8 +28,8 @@
                 <span>{{track.length | tracktime }}</span>
             </div>
             <div class="playlist-item-controls" layout="row" layout-align="space-around center">
-                <span class="icon-play green-text" ng-click="doPlayTrack($event,$index)" hm-tap="doPlayTrack($event,$index)"></span>
-                <span class="icon-remove" ng-click="doRemoveTrack($event,$index)" hm-tap="doRemoveTrack($event,$index)"></span>
+                <span class="mdi-av-play-circle-outline green-text" ng-click="doPlayTrack($event,$index)" hm-tap="doPlayTrack($event,$index)"></span>
+                <i class="mdi-content-clear white-text" ng-click="doRemoveTrack($event,$index)" hm-tap="doRemoveTrack($event,$index)"></i>
                 <!-- <span class="menu-dots">&#x22ee;</span> -->
             </div>
         </div>

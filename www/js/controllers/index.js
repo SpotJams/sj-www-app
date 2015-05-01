@@ -4,7 +4,7 @@ angular.module('SpotJams')
     function($rootScope, $scope, $location, authService, profileService) {
         var self = this;
 
-        console.log("IndexController")
+        // console.log("IndexController")
 
         // document.addEventListener("deviceready", doInit, false);
         // angular.element(document).ready(function () {

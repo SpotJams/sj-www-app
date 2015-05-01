@@ -16,7 +16,7 @@ angular.module("SpotJams")
     }
 })
 
-.controller("TrackStripController", function($scope, $location, $mdToast) {
+.controller("TrackStripController", function($scope, $location) {
     var self = $scope;
 
     self.showCard = function(event) {
@@ -58,10 +58,10 @@ angular.module("SpotJams")
         var plc = angular.element($('#playlist-container'))
         plc.scope().addPlayTrack(null,self.track);
 
-        $mdToast.show(
-          $mdToast.simple()
-            .content('Playing: ' + self.track.title)
-        );
+        // $mdToast.show(
+        //   $mdToast.simple()
+        //     .content('Playing: ' + self.track.title)
+        // );
 
     }
 
@@ -76,12 +76,12 @@ angular.module("SpotJams")
         var plc = angular.element($('#playlist-container'))
         plc.scope().addTrackBack(self.track);
 
-        $mdToast.show(
-          $mdToast.simple()
-            .content('Queuing: ' + self.track.title)
-            // .position($scope.getToastPosition())
-            // .hideDelay(3000)
-        );
+        // $mdToast.show(
+        //   $mdToast.simple()
+        //     .content('Queuing: ' + self.track.title)
+        //     // .position($scope.getToastPosition())
+        //     // .hideDelay(3000)
+        // );
 
     }
 

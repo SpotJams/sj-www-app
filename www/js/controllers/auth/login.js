@@ -1,7 +1,7 @@
 angular.module("SpotJams")
 
 .controller("LoginController",
-    function($scope, $state, authService, profileService) {
+    function($rootScope, $scope, $state, authService, profileService, playlistService) {
 
         // var decls
         var self = this;
@@ -21,18 +21,21 @@ angular.module("SpotJams")
             evt.preventDefault();
             console.log("tryLogin - doing", evt)
 
-            // console.log(self.creds)
-
             // client-side validation
             // ...?
 
-            authService.loginCreds(self.creds.username, self.creds.password,
+            authService.loginCreds(self.creds.username, self.creds.password)
+            .then(
                 function success(data) {
-                    console.log("Login success")
+                    console.log("Login success", profile)
                     var profile = data.profile;
                     // compare here?
                     profileService.set(profile);
                     profileService.save();
+                    playlistService.load();
+
+
+                    $rootScope.profile = profile; 
 
                     $state.go("main");
                 },

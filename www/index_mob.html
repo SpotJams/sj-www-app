@@ -1,76 +1,55 @@
 <!DOCTYPE html>
 <html ng-app="SpotJams">
-<!--
-  * Copyright © 2012-2015, Intel Corporation. All rights reserved.
-  * Please see the included README.md file for license terms and conditions.
-  -->
-
 <head>
     <title>SpotJams</title>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-    <!--
-  * The "meta viewport" tag (below) helps your app size appropriately to a device's ideal viewport.
-  * Note that Windows device viewports work better when initialized using the @viewport CSS rule.
-  * For a quick overview of "meta viewport" and @viewport, see this article:
-  *   http://webdesign.tutsplus.com/tutorials/htmlcss-tutorials/quick-tip-dont-forget-the-viewport-meta-tag
-  * To see how it works, try your app on a real device with and without a "meta viewport" tag.
-  * Additional useful references include:
-  *   http://www.quirksmode.org/mobile/viewports.html
-  *   http://www.quirksmode.org/mobile/metaviewport/devices.html
-  *   https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html
--->
-    <!-- <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1"> -->
+
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=no">
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes, minimum-scale=1, maximum-scale=2"> -->
-    <style>
-    /* following three (cascaded) are equivalent to above three meta viewport statements */
-    /* see http://www.quirksmode.org/blog/archives/2014/05/html5_dev_conf.html */
-    /* see http://dev.w3.org/csswg/css-device-adapt/ */
 
-    @-ms-viewport {
-        width: 100vw;
-        min-zoom: 100%;
-        zoom: 100%;
-    }
+    <link rel="shortcut icon" href="img/favicon.png">
 
-    @viewport {
-        width: 100vw;
-        min-zoom: 100% zoom: 100%;
-    }
+    <link rel="stylesheet" href="font/patua-one/stylesheet.css">
+    <link rel="stylesheet" href="vendor/cropper.min.css">
 
-    @-ms-viewport {
-        user-zoom: fixed;
-        min-zoom: 100%;
-    }
-
-    @viewport {
-        user-zoom: fixed;
-        min-zoom: 100%;
-    }
-    /*@-ms-viewport { user-zoom: zoom ; min-zoom: 100% ; max-zoom: 200% ; }   @viewport { user-zoom: zoom ; min-zoom: 100% ; max-zoom: 200% ; }*/
-    </style>
-     <link rel="shortcut icon" href="img/favicon.png">
-
-    <link rel="stylesheet" href="css/fonts/patua-one/stylesheet.css">
-    <link rel="stylesheet" href="css/fonts/roboto_regular_macroman/stylesheet.css">
-    <link rel="stylesheet" href="vendor/bower_components/angular-material/angular-material.min.css" />
-    <link rel="stylesheet" href="vendor/whhg-font/css/whhg.css">
-    <link rel="stylesheet" href="vendor/bower_components/cropper/dist/cropper.min.css">
-
-    <link rel="stylesheet" href="css/app.css">
-    <link rel="stylesheet/less" type="text/css" href="less/colors.less" />
-    <link rel="stylesheet/less" type="text/css" href="less/indexes.less" />
-    <link rel="stylesheet/less" type="text/css" href="less/profile.less" />
-    <link rel="stylesheet/less" type="text/css" href="less/cards.less" />
-    <link rel="stylesheet/less" type="text/css" href="less/player.less" />
-    <link rel="stylesheet/less" type="text/css" href="less/tracks.less" />
+    <link rel="stylesheet" href="css/sj-www-app.css">
+    
 </head>
 
 <body ng-controller="BodyController as bodyCtrl">
     <div id="body-menu-shim" hm-swiperight="bodyCtrl.leftMenuSlide($event)">
     </div>
 
-    <div id="root-view-div" ng-controller="ToolbarController as toolbarCtrl">
+    <div id="sj-title-bar" class="navbar-fixed">
+        <nav class="sj-yellow">
+            <div class="nav-wrapper">
+                <a ng-href="/" class="brand-logo sj-blue-text" style="font-family: 'patua_oneregular';">{{ tempTitle || "SpotJams" }}</a>
+                <a href="#" data-activates="mobile-demo" class="button-collapse sj-blue-text"><i class="mdi-navigation-menu"></i></a>
+                <i class="sj-blue-text mdi-image-audiotrack right-align" hm-tap="bodyCtrl.audioPlayerSlide($event)" ng-click="bodyCtrl.audioPlayerSlide($event)" hm-doubletap="bodyCtrl.audioPlayerFull($event)" ng-dblclick="bodyCtrl.audioPlayerFull($event)"></i>
+                
+                <ul class="right hide-on-med-and-down">
+                    <li><a href="theapp.html">The App</a></li>
+                    <li><a href="theidea.html">The Idea</a></li>
+                    <li><a href="story.html">The Story</a></li>
+                </ul>
+                <ul class="side-nav" id="mobile-demo">
+                    <li><a href="theapp.html">The App</a></li>
+                    <li><a href="theidea.html">The Idea</a></li>
+                    <li><a href="story.html">The Story</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+
+    <div ui-view>
+        <!-- Content is loaded from partials templates -->
+    </div>
+
+
+    <playlist></playlist>
+
+
+<!--     <div id="root-view-div" ng-controller="ToolbarController as toolbarCtrl">
         <md-content class="md-whiteframe-z1">
             <md-toolbar class="yellow-bg">
                 <div class="md-toolbar-tools">
@@ -149,14 +128,7 @@
                 </md-content>
             </md-sidenav>
         </div>
-
-        <div ui-view>
-            <!-- Content is loaded from partials templates -->
-        </div>
-
-
-
-        <playlist></playlist>
+ -->
 
     </div>
 
@@ -176,45 +148,33 @@
 
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
 
-    <script src="vendor/bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="vendor/bower_components/jquery-ui/ui/minified/widget.min.js"></script>
-    <script src="vendor/jquery-plugins/jquery.geocomplete.min.js"></script>
+    <script src="vendor/jquery.min.js"></script>
+    <script src="vendor/materialize.min.js"></script>
 
-    <script src="vendor/bower_components/moment/min/moment.min.js"></script>
-    <script src="vendor/bower_components/hammerjs/hammer.min.js"></script>
-    <script src="vendor/bower_components/cropper/dist/cropper.min.js"></script>
-    <script src="vendor/bower_components/sklad/sklad.js"></script>
 
+    <script src="vendor/widget.min.js"></script>
+    <script src="vendor/jquery.geocomplete.min.js"></script>
+
+    <script src="vendor/moment.min.js"></script>
+    <!-- // <script src="vendor/hammer.min.js"></script> -->
+    <script src="vendor/cropper.min.js"></script>
+    <script src="vendor/sklad.js"></script>
     <script src="vendor/canvas-to-blob.min.js"></script>
 
-    <script src="vendor/bower_components/angular/angular.min.js"></script>
-    <script src="vendor/bower_components/angular-touch/angular-touch.min.js"></script>
-    <script src="vendor/bower_components/angular-animate/angular-animate.min.js"></script>
-    <script src="vendor/bower_components/angular-aria/angular-aria.min.js"></script>
-    <script src="vendor/bower_components/angular-material/angular-material.min.js"></script>
-    <script src="vendor/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="vendor/angular.min.js"></script>
+    <script src="vendor/angular-touch.min.js"></script>
+    <script src="vendor/angular-ui-router.min.js"></script>
 
-    <script src="vendor/bower_components/ryanmullins-angular-hammer/angular.hammer.min.js"></script>
+    <script src="vendor/angular.hammer.min.js"></script>
 
-    <script src="vendor/bower_components/angulartics/dist/angulartics.min.js"></script>
-    <script src="vendor/bower_components/angulartics/dist/angulartics-ga.min.js"></script>
-    <script src="vendor/bower_components/angulartics/dist/angulartics-scroll.min.js"></script>
+    <script src="vendor/angulartics.min.js"></script>
+    <script src="vendor/angulartics-ga.min.js"></script>
+    <script src="vendor/angulartics-scroll.min.js"></script>
 
-    <script>
-    less = {
-        // env: 'development'
-    };
-    </script>
-    <script src="vendor/bower_components/less/dist/less.min.js"></script>
-    <script>
-    // less.watch();
-    </script>
-
-    <script src="cordova.js"></script>
 
     <!-- for your event code, see README and file comments for details -->
     <script src="js/click.js"></script>
-    <script src="js/app.js"></script>
+    <script src="js/webapp.js"></script>
     <script src="js/routes.js"></script>
     <script src="js/filters.js"></script>
     <script src="js/indexdb.js"></script>
@@ -223,6 +183,7 @@
     <script src="js/services/auth_manager.js"></script>
     <script src="js/services/image_manager.js"></script>
     <script src="js/services/track_manager.js"></script>
+    <script src="js/services/playlist_manager.js"></script>
     <script src="js/services/profile_manager.js"></script>
     <script src="js/services/social_manager.js"></script>
 
