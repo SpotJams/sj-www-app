@@ -58,9 +58,9 @@ angular.module("SpotJams")
                     _instance._authed = true;
                     $http.defaults.headers.common.Authorization = "Bearer " + data.token;
 
-                    saveTokenToDB(_instance._token, function(data) {
-                        console.log("saveToken ret:", data);
-                    });
+//                    saveTokenToDB(_instance._token, function(data) {
+//                        console.log("saveToken ret:", data);
+//                    });
                     defer.resolve(data);
                 }
             })
@@ -107,9 +107,9 @@ angular.module("SpotJams")
                     // and the have N (3 days?) to verify their account
                     // via an email
 
-                    saveTokenToDB(_instance._token, function(data) {
-                        console.log("saveToken ret:", data);
-                    });
+//                    saveTokenToDB(_instance._token, function(data) {
+//                        console.log("saveToken ret:", data);
+//                    });
                     success_handle(data);
                 }
             })
