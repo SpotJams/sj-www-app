@@ -45,7 +45,7 @@ angular.module("SpotJams")
                 }),
             })
             .success(function(data, status, headers, config) {
-                // console.log(data)
+                console.log(data)
                 if (data === undefined || data.error !== undefined) {
 
                     _instance.reset();
@@ -58,14 +58,18 @@ angular.module("SpotJams")
                     _instance._authed = true;
                     $http.defaults.headers.common.Authorization = "Bearer " + data.token;
 
-//                    saveTokenToDB(_instance._token, function(data) {
-//                        console.log("saveToken ret:", data);
-//                    });
+
+                    // ERROR check if IndexDB is available
+                    saveToken(_instance._token, function(data) {
+                        console.log("saveToken ret:", data);
+                    });
                     defer.resolve(data);
                 }
             })
             .error(function(data, status, headers, config) {
                 _instance.reset();
+
+                console.log("login error!!!")
 
                 defer.reject(data.error);
             })
@@ -107,9 +111,9 @@ angular.module("SpotJams")
                     // and the have N (3 days?) to verify their account
                     // via an email
 
-//                    saveTokenToDB(_instance._token, function(data) {
-//                        console.log("saveToken ret:", data);
-//                    });
+                   saveToken(_instance._token, function(data) {
+                       console.log("saveToken ret:", data);
+                   });
                     success_handle(data);
                 }
             })
@@ -122,7 +126,7 @@ angular.module("SpotJams")
         console.log("loginToken START")
         var defer = $q.defer();
 
-        var promise = loadTokenFromDB();
+        var promise = loadToken();
 
         promise.then(function(token) {
             _instance._token = token; // set the current token to the one we just read
@@ -131,7 +135,7 @@ angular.module("SpotJams")
             // also need to send the device information too
             return checkTokenWithServer(token); // verify
         }).then(function(data) {
-            console.log("success", data)
+            // console.log("success", data)
             defer.resolve(data);
         }, function(error) {
             defer.reject(error);
@@ -176,6 +180,187 @@ angular.module("SpotJams")
 
         return defer.promise;
     }
+
+    function loadToken() {
+        console.log("loadToken")
+
+        if( window.isMac ) {
+            return loadTokenFromFile();
+        } else {
+            return loadTokenFromDB();
+        }
+    }
+
+    function saveToken(token) {
+        console.log("saveToken", token)
+
+        if( window.isMac ) {
+            return saveTokenToFile(token);
+        } else {
+            return saveTokenToDB(token);
+        }
+    }
+
+    function removeToken() {
+        console.log("removeToken")
+
+        if( window.isMac ) {
+            return removeTokenFromFile();
+        } else {
+            return removeTokenFromDB();
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    function getTokenFileEntry(doCreate, success_handle, error_handle) {
+        navigator.webkitPersistentStorage.requestQuota( 100 * 1024 * 1024, function(grantedBytes) {
+            window.requestFileSystem(PERSISTENT, grantedBytes, onSuccess, function(error) {
+                console.log("Error occurred during request to file system pointer. Error code is: ", error);
+            });
+        }, function(e) {
+            console.log('Error', e);
+        });
+
+        function onSuccess(fileSystem) {
+            var directoryEntry = fileSystem.root;
+
+            directoryEntry.getDirectory("SpotJams", {
+                create: false,
+                exclusive: false
+            }, function() {}, function(error) {
+                error_handle(error);
+            })
+
+            directoryEntry.getFile("SpotJams/token.txt", {
+                create: doCreate,
+                exclusive: false
+            }, function(fileEntry) {
+                success_handle(fileEntry);
+            }, function(error) {
+                error_handle(error);
+            });
+        }
+    }
+
+    function loadTokenFromFile() {
+        
+        var defer = $q.defer();
+
+        var f = function() {
+            var token = localStorage.getItem("token");
+            defer.resolve(token);
+        }
+        
+        try {
+            console.log("loading token form localStorage")
+            f();
+        } catch(e) {
+            defer.reject(e);
+        }
+
+        // getTokenFileEntry(false, function(fileEntry) {
+
+        //     fileEntry.file(function(file) {
+        //         var reader = new FileReader();
+        //         reader.onloadend = function(evt) {
+        //             var token = evt.target.result;
+        //             // console.log("User Token: ", token)
+        //             defer.resolve(token);
+        //         };
+        //         reader.readAsText(file);
+
+        //     }, function(error) {
+        //         defer.reject(error);
+        //     });
+        // }, function(error) {
+        //     defer.reject(error);
+        // });
+
+        return defer.promise;
+    }
+
+    function saveTokenToFile(token) {
+        var defer = $q.defer();
+
+        var f = function() {
+            localStorage.setItem("token", token);
+            defer.resolve("success");
+        }
+
+        try {
+            console.log("saving token to localStorage")
+            f();
+        } catch(e) {
+            defer.reject(e);
+        }
+
+
+        // getTokenFileEntry(true, function(fileEntry) {
+
+        //     fileEntry.file(function(file) {
+
+        //         fileEntry.createWriter(function(writer) {
+        //             writer.write(token);
+        //             defer.resolve(token);
+        //         }, function(error) {
+        //             defer.reject(error);
+        //         });
+
+        //     }, function(error) {
+        //         defer.reject(error);
+        //     });
+        // }, function(error) {
+        //     defer.reject(error);
+        // });
+        return defer.promise
+    }
+
+    function removeTokenFromFile() {
+        var defer = $q.defer();
+        
+        var f = function() {
+            localStorage.removeItem("token");
+            defer.resolve("success");
+        }
+
+        try {
+            console.log("removing token form localStorage")
+            f();
+        } catch(e) {
+            defer.reject(e);
+        }
+
+
+        // getTokenFileEntry(true, function(fileEntry) {
+
+        //     fileEntry.file(function(file) {
+
+        //         fileEntry.remove(function(stuff) {
+        //             console.log("Logout succeeded", stuff)
+        //             defer.resolve(stuff);
+        //         }, function(error) {
+        //             defer.reject(error);
+        //         });
+
+        //     }, function(error) {
+        //         defer.reject(error);
+        //     });
+        // }, function(error) {
+        //     defer.reject(error);
+        // });
+        return defer.promise
+    }
+
 
     function loadTokenFromDB() {
         console.log("loadTokenFromDB START")

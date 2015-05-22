@@ -206,6 +206,7 @@ angular.module('SpotJams')
         if (!pass) {
             return;
         }
+        
         console.log("play!")
 
         ctrl.playing = true;
@@ -305,6 +306,7 @@ angular.module('SpotJams')
                 ctrl.trustedURL = $sce.trustAsResourceUrl(meta_data.trackURL);
                 console.log("trustedURL: ", ctrl.trustedURL);
                 ctrl.mediaPlayer.src = ctrl.trustedURL;
+                ctrl.mediaPlayer.load();
                 console.log("playing? ", ctrl.playing)
                 if (ctrl.playing) {
                     console.log("calling ctrl.play()")

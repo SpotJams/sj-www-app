@@ -7,6 +7,15 @@ window.app = window.app || {} ;         // there should only be one of these...
 
 window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
 
+window.isMac = false;
+if ( window.navigator.platform === "MacIntel" || window.navigator.platform === "iPhone") {
+    window.isMac = true;
+}
+
+console.log(window);
+console.log(window.navigator);
+
+
 /*jslint browser:true, devel:true, white:true, vars:true */
 /*global $:false, intel:false, app:false, dev:false */
 /*global myEventHandler:false, cordova:false, device:false */
@@ -169,17 +178,3 @@ function padStr(i) {
     return (i < 10) ? "0" + i : "" + i;
 }
 
-
-var CLICK_LOCK = false;
-var LOCK_TIMEOUT = 1000;
-function clickLock() {
-    if (CLICK_LOCK === true) {
-        return false;
-    } else {
-        CLICK_LOCK = true;
-        setTimeout(function() {
-            CLICK_LOCK = false;
-        }, LOCK_TIMEOUT);
-        return true;
-    }
-}

@@ -25,22 +25,37 @@ angular.module("SpotJams")
         var defer = $q.defer();
 
         var uid = authService.uid()
-        var dbP  = loadProfileFromDB(uid);
-        var srvP = loadPrivateProfileFromServer(uid);
+        var dbP  = loadProfile(uid);
 
-        $q.all([dbP,srvP])
-        .then(function(result) {
-            var profiles = [];
-            angular.forEach(result, function(response) {
-                profiles.push(response);
-              });
-            _instance._profile = profiles[0];
-            defer.resolve(profiles);
+
+        dbP.then(function success(result) {
+            console.log("found profile locally", result)    
+            _instance._profile = result;
+            defer.resolve(_instance._profile);
+   
+        }, function(error) {
+            console.log("profile missing locally", error)
         })
-        .catch(function(error) {
-            console.log("error loading profile: ", error);
+
+        // TODO eventually we only want to do this if there are updates pending from the server side
+        var srvP = loadPrivateProfileFromServer(uid);
+        srvP.then(function success(result) {
+            console.log("found profile remotely", result) 
+
+            if (!_instance._profile || !_instance._profile.uid) {
+                _instance._profile = result.profile;
+                
+                // TODO this returns a promise, should handle success / error events
+                _instance.save();
+            }
+            defer.resolve(_instance._profile);
+
+            // TODO check last modified dates, server should almost always be correct
+
+        }, function(error) {
+            console.log("profile missing remotely", error)
             defer.reject(error);
-        });
+        })
 
         return defer.promise
     }
@@ -49,7 +64,7 @@ angular.module("SpotJams")
         console.log("LOADING USER PROFILE")
         var defer = $q.defer();
 
-        var dbP  = loadProfileFromDB(uid);
+        var dbP  = loadProfile(uid);
         var srvP = loadPublicProfileFromServer(uid);
 
         $q.all([dbP,srvP])
@@ -79,7 +94,7 @@ angular.module("SpotJams")
 
         var profile = _instance._profile;
 
-        var dbP  = saveProfileToDB(profile);
+        var dbP  = saveProfile(profile);
         var srvP = saveProfileToServer(profile);
 
         $q.all([dbP,srvP])
@@ -94,6 +109,41 @@ angular.module("SpotJams")
 
         return defer.promise;
     }
+
+
+    function loadProfile(uid) {
+        console.log("loadProfile")
+
+        if( window.isMac ) {
+            return loadProfileFromFile(uid);
+        } else {
+            return loadProfileFromDB(uid);
+        }
+    }
+
+    function saveProfile(profile) {
+        console.log("saveProfile", profile)
+
+        if( window.isMac ) {
+            return saveProfileToFile(profile);
+        } else {
+            return saveProfileToDB(profile);
+        }
+    }
+
+    function removeProfile(uid) {
+        console.log("removeProfile")
+
+        if( window.isMac ) {
+            return removeProfileFromFile(uid);
+        } else {
+            return removeProfileFromDB(uid);
+        }
+    }
+
+
+
+
 
     function loadPublicProfileFromServer(id) {
         console.log("loadFromServerId: ", id)
@@ -167,6 +217,62 @@ angular.module("SpotJams")
         .error(function(data, status, headers, config) {
             defer.reject(data.error);
         })
+
+        return defer.promise
+    }
+
+
+    function loadProfileFromFile(uid) {
+        
+        var defer = $q.defer();
+
+        var f = function() {
+            var profile = JSON.parse(localStorage.getItem(uid + "-profile"));
+            defer.resolve(profile);
+        }
+        
+        try {
+            console.log("loading profile form localStorage")
+            f();
+        } catch(e) {
+            defer.reject(e);
+        }
+
+        return defer.promise;
+    }
+
+    function saveProfileToFile(profile) {
+        var defer = $q.defer();
+
+        var f = function() {
+            localStorage.setItem(profile.uid + "-profile", JSON.stringify(profile));
+            defer.resolve("success");
+        }
+
+        try {
+            console.log("saving profile to localStorage")
+            f();
+        } catch(e) {
+            defer.reject(e);
+        }
+
+        return defer.promise
+    }
+
+    function removeProfileFromFile(uid) {
+        var defer = $q.defer();
+        
+        var f = function() {
+            localStorage.removeItem(uid + "-profile");
+            defer.resolve("success");
+        }
+
+        try {
+            console.log("removing profile form localStorage")
+            f();
+        } catch(e) {
+            defer.reject(e);
+        }
 
         return defer.promise
     }

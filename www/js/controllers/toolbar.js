@@ -1,8 +1,16 @@
 angular.module('SpotJams')
 
 
-.controller("BodyController", function($scope, profileService) {
+.controller("BodyController", function($scope, authService, profileService) {
     var self = this;
+
+    self.showTitleBar = false;
+
+    $scope.auth = authService
+    $scope.$watch('auth.authed()', function(newVal) {
+        console.log("authed update: ", newVal)
+        self.showTitleBar = newVal;
+    })
 
     self.leftMenuSlide = function(event) {
         var pass = spotjams.clickbuster.onClick(event);
@@ -10,7 +18,10 @@ angular.module('SpotJams')
             return;
         }
 
-        $mdSidenav('left').open();
+        console.log("LHS menu");
+
+        var lhm = angular.element($('.button-collapse'))
+        lhm.sideNav('show')
     };
 
     self.audioPlayerSlide = function(event) {
@@ -36,26 +47,15 @@ angular.module('SpotJams')
 
 })
 
-.controller("ToolbarController", function($scope, $mdSidenav) {
-    var self = this;
-    self.toggleLeft = function(event) {
-        var pass = spotjams.clickbuster.onClick(event);
-        if (!pass) {
-            return;
-        }
-
-        $mdSidenav('left').open();
-    };
-})
-
-.controller('LeftMenuCtrl', function($state, $scope, $mdSidenav, authService) {
+.controller('LeftMenuCtrl', function($state, $scope, authService) {
     var self = this;
     self.closeLeft = function(event) {
         var pass = spotjams.clickbuster.onClick(event);
         if (!pass) {
             return;
         }
-        $mdSidenav('left').close()
+
+        closeLeftMenu();
     };
 
     self.gotoHome = function(event) {
@@ -65,7 +65,8 @@ angular.module('SpotJams')
         }
         console.log("leftmenu - home: ");
         $state.go("main")
-        $mdSidenav('left').close()
+
+        closeLeftMenu();
     };
     self.gotoDiscover = function(event) {
         var pass = spotjams.clickbuster.onClick(event);
@@ -74,18 +75,20 @@ angular.module('SpotJams')
         }
         console.log("leftmenu - discover: ");
         $state.go("find_people")
-        $mdSidenav('left').close()
+
+        closeLeftMenu();
 
     };
 
-    self.gotoMesages = function(event) {
+    self.gotoMessages = function(event) {
         var pass = spotjams.clickbuster.onClick(event);
         if (!pass) {
             return;
         }
         console.log("leftmenu - messages: ");
         $state.go("messages")
-        $mdSidenav('left').close()
+
+        closeLeftMenu();
 
     };
 
@@ -96,7 +99,8 @@ angular.module('SpotJams')
         }
         console.log("leftmenu - friends: ");
         $state.go("profile_friends")
-        $mdSidenav('left').close()
+
+        closeLeftMenu();
 
     };
     self.gotoTracks = function(event) {
@@ -106,7 +110,8 @@ angular.module('SpotJams')
         }
         console.log("leftmenu - tracks: ");
         $state.go("profile_tracks")
-        $mdSidenav('left').close()
+
+        closeLeftMenu();
 
     };
     self.gotoProfile = function(event) {
@@ -116,7 +121,8 @@ angular.module('SpotJams')
         }
         console.log("leftmenu - profile: ");
         $state.go("profile_user")
-        $mdSidenav('left').close()
+
+        closeLeftMenu();
 
     };
     self.gotoTutorials = function(event) {
@@ -126,7 +132,8 @@ angular.module('SpotJams')
         }
         console.log("leftmenu - tutorials: ");
         $state.go("tutorials")
-        $mdSidenav('left').close()
+
+        closeLeftMenu();
 
     };
     self.gotoSettings = function(event) {
@@ -136,7 +143,8 @@ angular.module('SpotJams')
         }
         console.log("leftmenu - settings: ");
         $state.go("settings")
-        $mdSidenav('left').close()
+
+        closeLeftMenu();
 
     };
     self.gotoLogout = function(event) {
@@ -147,18 +155,26 @@ angular.module('SpotJams')
         console.log("leftmenu - logout: ");
 
         authService.logout(function success() {
+            console.log("logout success")
             $state.go("index")
         }, function(error) {
             console.log("failed to logout: ", error);
             alert(error);
         });
 
+        $state.go("index")
 
-        $mdSidenav('left').close()
+
+        closeLeftMenu();
 
         // hide menu
 
     };
+
+    function closeLeftMenu() {
+        var lhm = angular.element($('.button-collapse'))
+        lhm.sideNav('hide')
+    }
 
 
 });

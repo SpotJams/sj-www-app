@@ -1,50 +1,58 @@
-<div id="register-div" ng-controller="RegisterController as registerCtrl" layout="column" layout-margin layout-fill layout-padding>
+<div id="register-div" ng-controller="RegisterController as registerCtrl" class="center-align">
 
     <i style="font-size:3em; font-style: normal; font-family: 'patua_oneregular';">
         <span class="blue-text">SpotJams</span>
-    </i>
+    </i><br>
     <i style="font-size:1em; font-style: normal;"><span class="red-text">HUMANS TOGETHER FOR MUSIC</span></i>
     <br><br>
 
-    <md-content class="md-padding" layout="column" layout-margin style="font-size:1.2em; text-align: left;">
+    <form ng-submit="registerCtrl.tryRegister($event)">
 
-        <md-input-container>
-            <label>First Name</label>
-            <input id="register-fname" ng-model="registerCtrl.creds.fname" name="fname" type="text" required style="font-size: 1.2em;" />
-        </md-input-container>
+        <div class="row">    
+            <div class="input-field col offset-s1 s10 offset-m3 m6">
+                <input id="register-fname" ng-model="registerCtrl.creds.fname" name="fname" type="text" required style="font-size: 1.2em;" />
+                <label for="register-fname">First Name</label>
+            </div>
+        </div>
+        <div class="row">        
+            <div class="input-field col offset-s1 s10 offset-m3 m6">
+                <input id="register-lname" ng-model="registerCtrl.creds.lname" name="lname" type="text" required style="font-size: 1.2em;" />
+                <label for="register-lname">Last Name</label>
+            </div>
+        </div>
+        <div class="row">        
+            <div class="input-field col offset-s1 s10 offset-m3 m6">
+                <input id="register-username" ng-model="registerCtrl.creds.username" name="username" type="text" required style="font-size: 1.2em;" />
+                <label for="register-username">Username</label>
+            </div>
+        </div>
+        <div class="row">        
+            <div class="input-field col offset-s1 s10 offset-m3 m6">
+                <input id="register-email" ng-model="registerCtrl.creds.email" name="email" type="email" required style="font-size: 1.2em;" />
+                <label for="register-email">Email</label>
+            </div>
+        </div>
+        <div class="row">        
+            <div class="input-field col offset-s1 s10 offset-m3 m6">
+                <input id="register-password" ng-model="registerCtrl.creds.password" name="password" type="password" required style="font-size: 1.2em;" />
+                <label for="register-password">Password</label>
+            </div>
+        </div>
+        <div class="row">        
+            <div class="input-field col offset-s1 s10 offset-m3 m6">
+                <input id="register-confirm" ng-model="registerCtrl.creds.confirm" name="password" type="password" required style="font-size: 1.2em;" />
+                <label for="register-confirm">Password Confirm</label>
+            </div>
+        </div>
 
-        <md-input-container>
-            <label>Last Name</label>
-            <input id="register-lname" ng-model="registerCtrl.creds.lname" name="lname" type="text" required style="font-size: 1.2em;" />
-        </md-input-container>
+        <div class="hiddendiv"><input type="submit" tabindex="-1"/></div>
+    
+    </form>
 
-        <md-input-container>
-            <label>Username</label>
-            <input id="register-username" ng-model="registerCtrl.creds.username" name="username" type="text" required style="font-size: 1.2em;" />
-        </md-input-container>
-
-        <md-input-container>
-            <label>Email</label>
-            <input id="register-email" ng-model="registerCtrl.creds.email" name="email" type="email" required style="font-size: 1.2em;" />
-        </md-input-container>
-
-        <md-input-container>
-            <label>Password</label>
-            <input id="register-password" ng-model="registerCtrl.creds.password" name="password" type="password" required style="font-size: 1.2em;" />
-        </md-input-container>
-
-        <md-input-container>
-            <label>Password Confirm</label>
-            <input id="register-confirm" ng-model="registerCtrl.creds.confirm" name="password" type="password" required style="font-size: 1.2em;" />
-        </md-input-container>
-
-    </md-content>
-
-    <md-content class="md-padding" layout="column" layout-margin style="font-size:1.5em;">
-        <md-button class="md-raised md-primary green-bg" hm-tap="registerCtrl.tryRegister($event)">
-            Register
-        </md-button>
-    </md-content>
-
+    <div class="row">
+        <div class="input-field col offset-s3 s6 offset-m4 m4 center-align">
+            <a class="btn green" hm-tap="registerCtrl.tryRegister($event)" hm-press="registerCtrl.tryRegister($event)">Register</a>
+        </div>
+    </div>
 
 </div>

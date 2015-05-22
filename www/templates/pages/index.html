@@ -1,4 +1,4 @@
-<div id="landing-div" ng-controller="IndexController as indexCtrl" layout="column" layout-align="space-between center" layout-margin layout-fill layout-padding>
+<div id="landing-div" ng-controller="IndexController as indexCtrl" class="center-align">
     <object id="landing-logo" type="image/svg+xml" data="img/spotjams-logo.svg">
 	    <img src="img/spotjams-logo.png" alt="No SVG Support"/>     
 	</object>
@@ -11,5 +11,5 @@
         HUMANS TOGETHER FOR MUSIC
     </span>
     <br><br>
-    <a class="btn sj-blue" id="landing-login-button" hm-tap="indexCtrl.gotoLogin($event)" hm-press="indexCtrl.gotoLogin($event)" style="width: 50vw;">Get Jammin'</a>
+    <a class="btn sj-blue" id="landing-login-button" ng-click="indexCtrl.gotoLogin($event)" hm-tap="indexCtrl.gotoLogin($event)" hm-press="indexCtrl.gotoLogin($event)" style="width: 50vw;">Get Jammin'</a>
 </div>

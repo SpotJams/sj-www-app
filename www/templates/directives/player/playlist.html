@@ -1,7 +1,7 @@
 <div id="playlist-container" ng-controller="PlaylistController" ng-class="{ 'show-player': showPlayer, 'show-list': showList }">
     <div layout="column" id="playlist-player-container" hm-swipeup="doShowList($event,true)" hm-swipedown="doShowPlayer($event,false)">
         <i id="closeButton" class="mdi-content-clear red-text" ng-click="doShowPlayer($event,false)" hm-tap="doShowPlayer($event,false)"></i>
-        <audio id="music" preload="true" src="">
+        <audio id="music" preload="none" src="" controls>
         </audio>
         <div layout="row" layout-fill layout-align="space-around center">
             <span id="prevButton" class="icon-previous" ng-click="prev($event)" hm-tap="prev($event)"></span>

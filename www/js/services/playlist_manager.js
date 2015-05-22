@@ -19,10 +19,25 @@ angular.module("SpotJams")
 	_instance.addList = function(tracks, pos) {
 		console.log("addList: ", pos, tracks)
 		if(!pos) {
-			_instance._playlist.concat(tracks);
-		} else {
-			Array.prototype.apply(_instance._playlist, [pos,0].concat(tracks))
-		}
+            console.log("BEFORE: ", _instance._playlist, tracks);
+            
+            if (!_instance._playlist) {
+                _instance._playlist = [];
+            }
+
+            if (_instance._playlist.length < 1 ) {
+                _instance._playlist = tracks;
+            } else {
+                _instance._playlist.concat(tracks);
+            }
+
+            console.log("AFTER: ", _instance._playlist);
+        } else {
+            Array.prototype.apply(_instance._playlist, [pos,0].concat(tracks))
+        }
+        // console.log("BEFORE: ", _instance._playlist, tracks);
+        // Array.prototype.apply(_instance._playlist, [pos,0].concat(tracks))
+        // console.log("AFTER: ", _instance._playlist);
 	}
 
 	_instance.move = function(last,next) {
@@ -48,7 +63,7 @@ angular.module("SpotJams")
 		var defer = $q.defer()
 
         var uid = authService.uid()
-        var dbP  = loadPlaylistFromDB(uid);
+        var dbP  = loadPlaylist(uid);
         // var srvP = loadPlaylistFromServer(uid);
 
         $q.all([dbP])
@@ -67,16 +82,17 @@ angular.module("SpotJams")
         });
 
 
-		return defer.promise
-	}
+        return defer.promise
+    }
 
     _instance.save = function() {
         console.log("Saving user playlist")
 
+        var uid = authService.uid()
         var defer = $q.defer();
 
-        var dbP  = savePlaylistToDB(playlist);
-        var srvP = savePlaylistToServer(playlist);
+        var dbP  = savePlaylist(uid,_instance._playlist);
+        var srvP = savePlaylistToServer(uid,_instance._playlist);
 
         $q.all([dbP,srvP])
         .then(function(result) {
@@ -91,6 +107,90 @@ angular.module("SpotJams")
         return defer.promise;
     }
 
+    function loadPlaylist(uid) {
+        console.log("loadPlaylist")
+
+        if( window.isMac ) {
+            return loadPlaylistFromFile(uid);
+        } else {
+            return loadPlaylistFromDB(uid);
+        }
+    }
+
+    function savePlaylist(uid, playlist) {
+        console.log("savePlaylist", playlist)
+
+        if( window.isMac ) {
+            return savePlaylistToFile(uid, playlist);
+        } else {
+            return savePlaylistToDB(uid, playlist);
+        }
+    }
+
+    function removePlaylist(uid) {
+        console.log("removePlaylist")
+
+        if( window.isMac ) {
+            return removePlaylistFromFile(uid);
+        } else {
+            return removePlaylistFromDB(uid);
+        }
+    }
+
+    function loadPlaylistFromFile(uid) {
+        
+        var defer = $q.defer();
+
+        var f = function() {
+            var playlist = JSON.parse(localStorage.getItem(uid + "-playlist"));
+            defer.resolve(playlist);
+        }
+        
+        try {
+            console.log("loading playlist form localStorage")
+            f();
+        } catch(e) {
+            defer.reject(e);
+        }
+
+        return defer.promise;
+    }
+
+    function savePlaylistToFile(uid,playlist) {
+        var defer = $q.defer();
+
+        var f = function() {
+            localStorage.setItem(uid + "-playlist", JSON.stringify(playlist));
+            defer.resolve("success");
+        }
+
+        try {
+            console.log("saving playlist to localStorage")
+            f();
+        } catch(e) {
+            defer.reject(e);
+        }
+
+        return defer.promise
+    }
+
+    function removePlaylistFromFile(uid) {
+        var defer = $q.defer();
+        
+        var f = function() {
+            localStorage.removeItem(uid + "-playlist");
+            defer.resolve("success");
+        }
+
+        try {
+            console.log("removing playlist form localStorage")
+            f();
+        } catch(e) {
+            defer.reject(e);
+        }
+
+        return defer.promise
+    }
 
 
     function loadPlaylistFromDB(uid) {
@@ -101,14 +201,14 @@ angular.module("SpotJams")
         var lower = uid + "-playliss"
         var upper = uid + "-playlisu"
 
-        sklad.open(dbName, function(err, conn) {
+        sklad.open(dbName, function(err, dbconn) {
             if (err) {
                 console.log("reject: ", err)
                 defer.reject(err);
                 return;
             }
 
-            conn.get('user', {
+            dbconn.get('user', {
                 range: IDBKeyRange.bound(lower, upper, true, true),
                 limit: 1,
                 direction: sklad.DESC
@@ -124,7 +224,8 @@ angular.module("SpotJams")
                     defer.resolve(records[0].value)
                 } else {
                     console.log("reject: ", "playlist not found")
-                    defer.reject("playlist not found locally");
+                    // defer.reject("playlist not found locally");
+                    defer.resolve([]);
                 }
             });
         });
@@ -144,7 +245,7 @@ angular.module("SpotJams")
                 defer.reject(err);
                 return;
             }
-            conn.upsert('user', data, function(err, key) {
+            dbconn.upsert('user', data, function(err, key) {
                 if (err) {
                     defer.reject(err);
                     return;
@@ -167,7 +268,7 @@ angular.module("SpotJams")
                 defer.reject(err);
                 return;
             }
-            conn.delete('user', name, function(err) {
+            dbconn.delete('user', name, function(err) {
                 if (err) {
                     defer.reject(err);
                     return;
@@ -205,13 +306,13 @@ angular.module("SpotJams")
         return defer.promise
     }
 
-    function saveToServer(playlist) {
+    function savePlaylistToServer(playlist) {
         console.log("saveToServer")
         var defer = $q.defer();
 
         $http({
             'method': "POST",
-            "url": HOMEBASE + "/api/playlist/" + _instance._playlist.uid,
+            "url": HOMEBASE + "/api/playlist/" + authService.uid(),
             "data": playlist,
         })
 

@@ -4,7 +4,6 @@ angular.module("SpotJams")
     function($scope, $rootScope, $state, $timeout, profileService) {
 
         // This is to wait on the load of the profile if this is the first page we visit
-        console.log("ProfileController: ", $scope.profile)
         var tmp = profileService.get().uid
         if (tmp == undefined) {
             var TIMEOUT = 100;
@@ -22,6 +21,7 @@ angular.module("SpotJams")
             $scope.profile = profileService.get();
         }
 
+        console.log("ProfileController: ", $scope.profile)
         $rootScope.tempTitle = "Profile";
         $scope.$on("$destroy", function() {
             if ($rootScope.tempTitle == "Profile") {
