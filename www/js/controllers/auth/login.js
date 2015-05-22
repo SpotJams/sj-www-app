@@ -31,8 +31,8 @@ angular.module("SpotJams")
                     var profile = data.profile;
                     // compare here?
                     profileService.set(profile);
-//                    profileService.save();
-//                    playlistService.load();
+                    profileService.save();
+                    playlistService.load();
 
 
                     $rootScope.profile = profile; 
