@@ -16,30 +16,71 @@
 </head>
 
 <body ng-controller="BodyController as bodyCtrl">
-    <div id="body-menu-shim" hm-swiperight="bodyCtrl.leftMenuSlide($event)">
-    </div>
 
-    <div id="sj-title-bar" class="navbar-fixed">
-        <nav class="sj-yellow">
-            <div class="nav-wrapper">
-                <a ng-href="/" class="brand-logo sj-blue-text" style="font-family: 'patua_oneregular';">{{ tempTitle || "SpotJams" }}</a>
-                <a href="#" data-activates="mobile-demo" class="button-collapse sj-blue-text"><i class="mdi-navigation-menu"></i></a>
-                <i class="sj-blue-text mdi-image-audiotrack right-align" hm-tap="bodyCtrl.audioPlayerSlide($event)" ng-click="bodyCtrl.audioPlayerSlide($event)" hm-doubletap="bodyCtrl.audioPlayerFull($event)" ng-dblclick="bodyCtrl.audioPlayerFull($event)"></i>
+    <div ng-show="bodyCtrl.showTitleBar">
+        <div id="body-menu-shim" hm-swiperight="bodyCtrl.leftMenuSlide($event)">
+        </div>
 
-                <ul class="right hide-on-med-and-down">
-                    <li><a href="theapp.html">The App</a></li>
-                    <li><a href="theidea.html">The Idea</a></li>
-                    <li><a href="story.html">The Story</a></li>
-                </ul>
-                <ul class="side-nav" id="mobile-demo">
-                    <li><a href="theapp.html">The App</a></li>
-                    <li><a href="theidea.html">The Idea</a></li>
-                    <li><a href="story.html">The Story</a></li>
+
+        <div id="sj-title-bar" class="navbar-fixed">
+            <nav class="sj-yellow">
+                <div class="nav-wrapper">
+
+                    <a href="#" data-activates="side-menu" class="button-collapse show-on-large sj-blue-text"><i class="mdi-navigation-menu"></i></a>
+
+
+                    <a ng-href="#/" class="brand-logo center sj-blue-text" style="font-family: 'patua_oneregular';">{{ tempTitle || "SpotJams" }}</a>
+
+
+                    <i id="playlist-btn" class="sj-blue-text mdi-av-queue-music right" style="font-size: 2.7rem" hm-tap="bodyCtrl.audioPlayerSlide($event)" ng-click="bodyCtrl.audioPlayerSlide($event)" hm-doubletap="bodyCtrl.audioPlayerFull($event)" ng-dblclick="bodyCtrl.audioPlayerFull($event)"></i>
+                </div>
+            </nav>
+
+            <div ng-controller="LeftMenuCtrl as lmCtrl">
+                <ul class="side-nav" id="side-menu">
+
+
+                    <li><a class="left-menu-item" ng-click="lmCtrl.gotoHome($event)" hm-tap="lmCtrl.gotoHome($event)">
+                        <i class="mdi-action-home blue-text" ></i>Home
+                    </a></li>
+
+                    <li><a class="left-menu-item" ng-click="lmCtrl.gotoDiscover($event)" hm-tap="lmCtrl.gotoDiscover($event)">
+                        <i class="mdi-av-recent-actors blue-text" ></i>Discover
+                    </a></li>
+
+                    <li><a class="left-menu-item" ng-click="lmCtrl.gotoMessages($event)" hm-tap="lmCtrl.gotoMessages($event)">
+                        <i class="mdi-communication-chat blue-text" ></i>Messages
+                    </a></li>
+
+                    <li><a class="left-menu-item" ng-click="lmCtrl.gotoFriends($event)" hm-tap="lmCtrl.gotoFriends($event)">
+                        <i class="mdi-social-people-outline blue-text" ></i>Friends
+                    </a></li>
+
+                    <li><a class="left-menu-item" ng-click="lmCtrl.gotoProfile($event)" hm-tap="lmCtrl.gotoProfile($event)">
+                        <i class="mdi-social-person-outline blue-text" ></i>Profile
+                    </a></li>
+
+                    <li><a class="left-menu-item" ng-click="lmCtrl.gotoTracks($event)" hm-tap="lmCtrl.gotoTracks($event)">
+                        <i class="mdi-av-my-library-music blue-text" ></i>Tracks
+                    </a></li>
+
+                    <li><a class="left-menu-item" ng-click="lmCtrl.gotoTutorials($event)" hm-tap="lmCtrl.gotoTutorials($event)">
+                        <i class="mdi-social-school blue-text" ></i>Tutorials
+                    </a></li>
+
+                    <li><a class="left-menu-item" ng-click="lmCtrl.gotoSettings($event)" hm-tap="lmCtrl.gotoSettings($event)">
+                        <i class="mdi-action-settings blue-text" ></i>Settings
+                    </a></li>
+
+
+                    <li><a class="left-menu-item" ng-click="lmCtrl.gotoLogout($event)" hm-tap="lmCtrl.gotoLogout($event)">
+                        <i class="mdi-action-exit-to-app blue-text" ></i>Logout
+                    </a></li>
                 </ul>
             </div>
-        </nav>
-    </div>
+        </div>
 
+    </div>
 
     <div ui-view>
         <!-- Content is loaded from partials templates -->
@@ -47,88 +88,6 @@
 
 
     <playlist></playlist>
-
-
-<!--     <div id="root-view-div" ng-controller="ToolbarController as toolbarCtrl">
-        <md-content class="md-whiteframe-z1">
-            <md-toolbar class="yellow-bg">
-                <div class="md-toolbar-tools">
-                    <div class="yellow-bg" hm-tap="toolbarCtrl.toggleLeft($event)" ng-click="toolbarCtrl.toggleLeft($event)" style="height: 40px; width: 50px; margin-right: 5px;" layout="row" layout-align="center center">
-                        <i class="icon-menu blue-text" style="padding-top:2px;"></i>
-                    </div>
-                    <span style="font-size: 1.2em; font-family: 'patua_oneregular';" class="blue-text">
-                        {{ tempTitle || "SpotJams" }}
-                    </span>
-                    <span flex></span>
-
-                    <div class="yellow-bg" hm-tap="bodyCtrl.audioPlayerSlide($event)" ng-click="bodyCtrl.audioPlayerSlide($event)" hm-doubletap="bodyCtrl.audioPlayerFull($event)" ng-dblclick="bodyCtrl.audioPlayerFull($event)" style="height: 40px; width: 50px; margin-right: 5px;" layout="row" layout-align="center center">
-                        <i class="icon-music blue-text" style="padding-top:2px;"></i>
-                    </div>
-
-                </div>
-            </md-toolbar>
-        </md-content>
-        <div ng-controller="LeftMenuCtrl as lmCtrl">
-            <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" hm-swipeleft="lmCtrl.closeLeft($event)" hm-panleft="lmCtrl.closeLeft($event)" layout="column" style="min-width: 120px !important; width: 60vw !important; max-width: 304px !important;">
-                <md-toolbar class="blue-bg yellow-text" layout="row" layout-align="space-between center">
-                    <span style="font-size: 1.2em;" class="md-toolbar-tools">Menu</span>
-                    <span flex></span>
-                    <div hm-tap="lmCtrl.closeLeft($event)" ng-click="lmCtrl.closeLeft($event)" style="height: 40px; width: 60px; margin-right: 5px; font-size: 1.2em;" layout="row" layout-align="center center">
-                        <i class="icon-remove"></i>
-                    </div>
-                </md-toolbar>
-                <md-content flex layout="column" layout-align="start start" style="font-size: 1.2em;">
-
-                    <span class="left-menu-item" layout="row" ng-click="lmCtrl.gotoHome($event)" hm-tap="lmCtrl.gotoHome($event)" layout-align="start center">
-                        <i class="icon-home blue-text" ></i>
-                        Home
-                    </span>
-
-                    <span class="left-menu-item" layout="row" ng-click="lmCtrl.gotoDiscover($event)" hm-tap="lmCtrl.gotoDiscover($event)" layout-align="start center">
-                        <i class="icon-findfriends blue-text" ></i>
-                        Discover
-                    </span>
-
-                    <span class="left-menu-item" layout="row" ng-click="lmCtrl.gotoMessages($event)" hm-tap="lmCtrl.gotoMessages($event)" layout-align="start center">
-                        <i class="icon-socialnetwork blue-text" ></i>
-                        Messages
-                    </span>
-
-                    <span class="left-menu-item" layout="row" ng-click="lmCtrl.gotoFriends($event)" hm-tap="lmCtrl.gotoFriends($event)" layout-align="start center">
-                        <i class="icon-groups-friends blue-text" ></i>
-                        Friends
-                    </span>
-
-                    <span class="left-menu-item" layout="row" ng-click="lmCtrl.gotoProfile($event)" hm-tap="lmCtrl.gotoProfile($event)" layout-align="start center">
-                        <i class="icon-user blue-text" ></i>
-                        Profile
-                    </span>
-
-                    <span class="left-menu-item" layout="row" ng-click="lmCtrl.gotoTracks($event)" hm-tap="lmCtrl.gotoTracks($event)" layout-align="start center">
-                        <i class="icon-cassette blue-text" ></i>
-                        Tracks
-                    </span>
-
-                    <span class="left-menu-item" layout="row" ng-click="lmCtrl.gotoTutorials($event)" hm-tap="lmCtrl.gotoTutorials($event)" layout-align="start center">
-                        <i class="icon-student-school blue-text" ></i>
-                        Tutorials
-                    </span>
-
-                    <span class="left-menu-item" layout="row" ng-click="lmCtrl.gotoSettings($event)" hm-tap="lmCtrl.gotoSettings($event)" layout-align="start center">
-                        <i class="icon-cog blue-text" ></i>
-                        Settings
-                    </span>
-
-                    <span class="left-menu-item" layout="row" ng-click="lmCtrl.gotoLogout($event)" hm-tap="lmCtrl.gotoLogout($event)" layout-align="start center">
-                        <i class="icon-handtwofingers blue-text" ></i>
-                        Logout
-                    </span>
-
-                    <span flex><span>
-                </md-content>
-            </md-sidenav>
-        </div>
- -->
 
     </div>
 
@@ -146,7 +105,6 @@
       // ga('send', 'pageview');
     </script>
 
-    <script src="vendor/sklad.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
 
     <script src="vendor/jquery.min.js"></script>
@@ -159,6 +117,7 @@
     <script src="vendor/moment.min.js"></script>
     <!-- // <script src="vendor/hammer.min.js"></script> -->
     <script src="vendor/cropper.min.js"></script>
+    <script src="vendor/sklad.js"></script>
     <script src="vendor/canvas-to-blob.min.js"></script>
 
     <script src="vendor/angular.min.js"></script>
@@ -171,6 +130,7 @@
     <script src="vendor/angulartics-ga.min.js"></script>
     <script src="vendor/angulartics-scroll.min.js"></script>
 
+
     <script src="cordova.js"></script>
 
 
@@ -182,6 +142,7 @@
     <script src="js/indexdb.js"></script>
 
 
+    <script src="js/services/error_reporter.js"></script>
     <script src="js/services/auth_manager.js"></script>
     <script src="js/services/image_manager.js"></script>
     <script src="js/services/track_manager.js"></script>
