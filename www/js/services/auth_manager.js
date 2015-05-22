@@ -78,10 +78,10 @@ angular.module("SpotJams")
 
     }
 
-    _instance.logout = function(success_handle, error_handle) {
+    _instance.logout = function() {
         // TODO make http request to remove server side token
         _instance.reset();
-        removeTokenFromDB(success_handle, error_handle).then(
+        removeToken().then(
             function(data) {
                 console.log("logout success")
             },
