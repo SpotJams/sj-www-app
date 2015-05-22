@@ -37,6 +37,19 @@ angular.module("SpotJams")
 
                     $rootScope.profile = profile; 
 
+                    var pl = playlistService.get();
+                    console.log(pl)
+                    if(pl == null || pl.length < 1) {
+                        console.log("empty playlist, adding user tracks")
+                
+                        var plc = angular.element($('#playlist-container'))
+                        plc.scope().tracks = profileService.get().tracks;
+                        console.log("init playlist", plc.scope().tracks);
+                
+                        playlistService.addList(profileService.get().tracks);
+                        playlistService.save()
+                    }
+
                     $state.go("main");
                 },
                 function(error) {

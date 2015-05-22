@@ -48,6 +48,7 @@ angular.module("SpotJams")
     }
 
     self.playNow = function(event, tid) {
+        console.log("GOT HERE playNow")
         var pass = spotjams.clickbuster.onClick(event);
         if (!pass) {
             return;
