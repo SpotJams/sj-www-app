@@ -31,10 +31,10 @@ angular.module("SpotJams")
     self.playTime = 0.0;
     self.totalTime = 0.0
 
-    if (window.isMac) {
-    	alert("Web Audio API is not supported in this browser. Try Chrome, it works and is safer :]")
-    	return;
-    }
+//    if (window.isMac) {
+//    	alert("Web Audio API is not supported in this browser. Try Chrome, it works and is safer :]")
+//    	return;
+//    }
 
     try {
         self.audioContext = new AudioContext();
@@ -580,3 +580,675 @@ angular.module("SpotJams")
     }
 
 })
+
+/*
+ self.showTrackDialog = function(evt) {
+ var setup = self;
+ 
+ evt.preventDefault();
+ console.log("showImageDialog - doing", evt);
+ 
+ var recordAudio;
+ var audioPreview = document.getElementById('audio-preview');
+ setup.audioPreview = angular.element(audioPreview);
+ 
+ var parentEl = angular.element(document.body);
+ $mdDialog.show({
+ parent: parentEl,
+ targetEvent: evt,
+ templateUrl: "templates/dialogs/upload_track.html",
+ controller: DialogController
+ });
+ 
+ function DialogController(scope, $mdDialog) {
+ // TODO make directory for recordings if not present
+ var src = "SpotJams/recordings/recording.mp3";
+ scope.mediaRec = new Media(src, onSuccess, onError,
+ function(status) {
+ console.log("recordAudio():Audio Status: " + status);
+ // setAudioStatus(Media.MEDIA_MSG[status]);
+ });
+ var recInterval;
+ var recTime = 0;
+ scope.recording = false;
+ scope.converting = false;
+ scope.recordingDone = false;
+ 
+ var ctrl = scope;
+ 
+ // scope.isRecording = function() {
+ //     return recording;
+ // }
+ 
+ // scope.isConverting = function() {
+ //     return converting;
+ // }
+ 
+ // scope.isRecordingDone = function() {
+ //     return recordingDone;
+ // }
+ 
+ scope.startRecording = function() {
+ document.getElementById('stop-recording-audio').disabled = false;
+ document.getElementById('start-recording-audio').disabled = true;
+ 
+ // Record audio
+ ctrl.recording = true;
+ ctrl.mediaRec.startRecord();
+ recTime = 0;
+ 
+ recInterval = setInterval(function() {
+ recTime = recTime + 1;
+ setAudioPosition(recTime + " sec");
+ }, 1000);
+ 
+ // navigator.getUserMedia({
+ //     audio: true
+ // }, function(stream) {
+ //     audioPreview.src = window.URL.createObjectURL(stream);
+ //     audioPreview.play();
+ 
+ //     recordAudio = RecordRTC(stream, {
+ //         bufferSize: 16384
+ //     });
+ 
+ //     recordAudio.startRecording();
+ // }, function(error) {
+ //     throw error;
+ // });
+ }
+ 
+ // onSuccess Callback
+ //
+ function onSuccess(_event) {
+ console.log("recordAudio():Audio Success");
+ console.log("mediaRec: ", _event)
+ }
+ 
+ // onError Callback
+ //
+ function onError(error) {
+ console.log('error: ', error);
+ }
+ 
+ function setAudioPosition(position) {
+ document.getElementById('audio_position').innerHTML = position;
+ }
+ 
+ scope.stopRecording = function() {
+ document.getElementById('stop-recording-audio').disabled = true;
+ 
+ clearInterval(recInterval);
+ this.mediaRec.stopRecord();
+ 
+ ctrl.recording = false;
+ ctrl.converting = true;
+ 
+ var this_ctrl = ctrl;
+ console.log("mediaRec: ", this.mediaRec)
+ 
+ requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSuccess, onFileError);
+ 
+ function onFileSuccess(fileSystem) {
+ var directoryEntry = fileSystem.root;
+ 
+ // write profile file
+ directoryEntry.getFile("SpotJams/recordings/recording.wav", {
+ create: false,
+ exclusive: false
+ }, function(fileEntry) {
+ //lets write something into the file
+ function win(file) {
+ console.log("Reading File: ", file);
+ 
+ var size = document.getElementById('track-size')
+ size.innerHTML = file.size / 1024.0;
+ 
+ 
+ var reader = new FileReader();
+ reader.onloadend = function(evt) {
+ var local_ctrl = this_ctrl;
+ var file_contents = evt.target.result;
+ console.log("File Contents: ", file_contents)
+ 
+ // set audio element as WAV file
+ var elem = document.getElementById('audio-preview')
+ elem.src = file_contents;
+ 
+ $rootScope.$apply(function() {
+ local_ctrl.converting = false;
+ local_ctrl.recordingDone = true;
+ })
+ 
+ 
+ elem.addEventListener("loadedmetadata", function(_event) {
+ //TODO whatever
+ console.log(_event)
+ var a = _event.srcElement;
+ 
+ // var start = this.seekable.start(0);  // Returns the starting time (in seconds)
+ // var end = this.seekable.end(0);    // Returns the ending time (in seconds)
+ 
+ 
+ console.log("duration:  ", a.duration)
+ // console.log("end-start: ", end-start)
+ });
+ elem.addEventListener("canplay", function(_event) {
+ console.log("canplay")
+ console.log("duration:  ", _event.target.duration)
+ }, true);
+ 
+ elem.addEventListener("canplaythrough", function(_event) {
+ console.log("canplaythrough")
+ console.log("duration:  ", _event.target.duration)
+ }, true);
+ };
+ //to read the content as binary use readAsArrayBuffer function.
+ reader.readAsDataURL(file);
+ 
+ // --------------------------------------------------------
+ // var arrayer = new FileReader();
+ // arrayer.onloadend = function(evt) {
+ //     // convert to ogg
+ //     var file_contents = evt.target.result;
+ 
+ //     console.log("ArrayBuffer: ", file_contents)
+ 
+ // var capture = convertOGG(file_contents, 0.4);
+ 
+ // var result = capture.stop();
+ 
+ // result.then(function(blob) {
+ //     var url = URL.createObjectURL(blob);
+ //     // Android Chrome BUG:
+ //     // need to download local blob for some reason
+ //     return downloadBlob(url);
+ // }).then(function(blob) {
+ //     var url = URL.createObjectURL(blob);
+ 
+ //     // set audio element as OGG file
+ //     var recording = document.getElementById('track-container')
+ //     done = true;
+ 
+ //     // var audio = recording.querySelector('audio');
+ //     // audio.src = url;
+ 
+ //     var size = recording.querySelector('[data-key=size] ~ .value');
+ //     size.innerText = blob.size;
+ // this_ctrl.converting = false;
+ // this_ctrl.recordingDone = true;
+ //     capture = null;
+ // });
+ 
+ // save as file
+ 
+ // upload to server
+ // };
+ //to read the content as binary use readAsArrayBuffer function.
+ // arrayer.readAsArrayBuffer(file);
+ 
+ 
+ };
+ 
+ var fail = function(error) {
+ console.log(error.code);
+ };
+ 
+ fileEntry.file(win, fail);
+ }, function(error) {
+ console.log("Error occurred while getting a pointer to file. Error code is: " + error.DOMError);
+ return;
+ });
+ 
+ }
+ 
+ function onFileError(evt) {
+ console.log("Error occurred during request to file system pointer. Error code is: " + evt.code);
+ }
+ 
+ }
+ 
+ function downloadBlob(url) {
+ return new Promise(function(resolve, reject) {
+ var xhr = new XMLHttpRequest();
+ xhr.open('GET', url, true);
+ xhr.responseType = 'blob';
+ 
+ xhr.onload = function() {
+ resolve(xhr.response)
+ };
+ 
+ xhr.onerror = reject;
+ 
+ xhr.send();
+ });
+ }
+ 
+ function convertOGG(file, quality) {
+ var bufferSize = 4 * 1024;
+ 
+ // var audioContext = new AudioContext();
+ // var audioSourceNode = audioContext.createMediaStreamSource(stream);
+ // var scriptProcessorNode = audioContext.createScriptProcessor(bufferSize);
+ 
+ var channels = 2;
+ // var sampleRate = audioContext.sampleRate;
+ var sampleRate = 8000;
+ 
+ var encoder =
+ Vorbis.Encoding.createVBR(channels, sampleRate, quality)
+ .then(Vorbis.Encoding.writeHeaders);
+ 
+ return encoder.then(Vorbis.Encoding.finish);
+ 
+ 
+ 
+ // scriptProcessorNode.onaudioprocess = function(ev) {
+ //     var inputBuffer = ev.inputBuffer;
+ //     var samples = inputBuffer.length;
+ 
+ //     var ch0 = inputBuffer.getChannelData(0);
+ //     var ch1 = inputBuffer.getChannelData(1);
+ 
+ //     // script processor reuses buffers; we need to make copies
+ //     ch0 = new Float32Array(ch0);
+ //     ch1 = new Float32Array(ch1);
+ 
+ //     // Float32Array is not Transferrable
+ //     // so we get the underlying ArrayBuffer
+ //     var buffers = [ch0.buffer, ch1.buffer];
+ 
+ //     encoder = encoder.then(Vorbis.Encoding.encodeTransfer(samples, buffers));
+ // };
+ 
+ // audioSourceNode.connect(scriptProcessorNode);
+ // scriptProcessorNode.connect(audioContext.destination);
+ 
+ // return {
+ //     stop: function() {
+ //         audioSourceNode.disconnect(scriptProcessorNode);
+ //         scriptProcessorNode.disconnect(audioContext.destination);
+ 
+ //         return encoder.then(Vorbis.Encoding.finish);
+ //     }
+ // };
+ }
+ 
+ scope.saveTrack = function() {
+ 
+ console.log("Saving track")
+ $mdDialog.hide();
+ 
+ }
+ 
+ scope.closeDialog = function() {
+ $mdDialog.hide();
+ }
+ 
+ scope.getAudio = function(evt) {
+ console.log("getAudio - doing", evt);
+ evt.preventDefault();
+ 
+ // Launch device audio recording application,
+ navigator.device.capture.captureAudio(captureAudioSuccess, captureAudioError, {
+ limit: 1
+ });
+ }
+ }
+ 
+ }
+ 
+ // Called when capture operation is finished
+ //
+ function captureAudioSuccess(mediaFiles) {
+ var i, len;
+ for (i = 0, len = mediaFiles.length; i < len; i += 1) {
+ console.log(mediaFiles[i]);
+ // uploadFile(mediaFiles[i]);
+ }
+ }
+ 
+ // Called if something bad happens.
+ //
+ function captureAudioError(error) {
+ var msg = 'An error occurred during capture: ' + error.code;
+ navigator.notification.alert(msg, null, 'Uh oh!');
+ }
+ 
+ 
+ }         self.showTrackDialog = function(evt) {
+ var setup = self;
+ 
+ evt.preventDefault();
+ console.log("showImageDialog - doing", evt);
+ 
+ var recordAudio;
+ var audioPreview = document.getElementById('audio-preview');
+ setup.audioPreview = angular.element(audioPreview);
+ 
+ var parentEl = angular.element(document.body);
+ $mdDialog.show({
+ parent: parentEl,
+ targetEvent: evt,
+ templateUrl: "templates/dialogs/upload_track.html",
+ controller: DialogController
+ });
+ 
+ function DialogController(scope, $mdDialog) {
+ // TODO make directory for recordings if not present
+ var src = "SpotJams/recordings/recording.mp3";
+ scope.mediaRec = new Media(src, onSuccess, onError,
+ function(status) {
+ console.log("recordAudio():Audio Status: " + status);
+ // setAudioStatus(Media.MEDIA_MSG[status]);
+ });
+ var recInterval;
+ var recTime = 0;
+ scope.recording = false;
+ scope.converting = false;
+ scope.recordingDone = false;
+ 
+ var ctrl = scope;
+ 
+ // scope.isRecording = function() {
+ //     return recording;
+ // }
+ 
+ // scope.isConverting = function() {
+ //     return converting;
+ // }
+ 
+ // scope.isRecordingDone = function() {
+ //     return recordingDone;
+ // }
+ 
+ scope.startRecording = function() {
+ document.getElementById('stop-recording-audio').disabled = false;
+ document.getElementById('start-recording-audio').disabled = true;
+ 
+ // Record audio
+ ctrl.recording = true;
+ ctrl.mediaRec.startRecord();
+ recTime = 0;
+ 
+ recInterval = setInterval(function() {
+ recTime = recTime + 1;
+ setAudioPosition(recTime + " sec");
+ }, 1000);
+ 
+ // navigator.getUserMedia({
+ //     audio: true
+ // }, function(stream) {
+ //     audioPreview.src = window.URL.createObjectURL(stream);
+ //     audioPreview.play();
+ 
+ //     recordAudio = RecordRTC(stream, {
+ //         bufferSize: 16384
+ //     });
+ 
+ //     recordAudio.startRecording();
+ // }, function(error) {
+ //     throw error;
+ // });
+ }
+ 
+ // onSuccess Callback
+ //
+ function onSuccess(_event) {
+ console.log("recordAudio():Audio Success");
+ console.log("mediaRec: ", _event)
+ }
+ 
+ // onError Callback
+ //
+ function onError(error) {
+ console.log('error: ', error);
+ }
+ 
+ function setAudioPosition(position) {
+ document.getElementById('audio_position').innerHTML = position;
+ }
+ 
+ scope.stopRecording = function() {
+ document.getElementById('stop-recording-audio').disabled = true;
+ 
+ clearInterval(recInterval);
+ this.mediaRec.stopRecord();
+ 
+ ctrl.recording = false;
+ ctrl.converting = true;
+ 
+ var this_ctrl = ctrl;
+ console.log("mediaRec: ", this.mediaRec)
+ 
+ requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSuccess, onFileError);
+ 
+ function onFileSuccess(fileSystem) {
+ var directoryEntry = fileSystem.root;
+ 
+ // write profile file
+ directoryEntry.getFile("SpotJams/recordings/recording.wav", {
+ create: false,
+ exclusive: false
+ }, function(fileEntry) {
+ //lets write something into the file
+ function win(file) {
+ console.log("Reading File: ", file);
+ 
+ var size = document.getElementById('track-size')
+ size.innerHTML = file.size / 1024.0;
+ 
+ 
+ var reader = new FileReader();
+ reader.onloadend = function(evt) {
+ var local_ctrl = this_ctrl;
+ var file_contents = evt.target.result;
+ console.log("File Contents: ", file_contents)
+ 
+ // set audio element as WAV file
+ var elem = document.getElementById('audio-preview')
+ elem.src = file_contents;
+ 
+ $rootScope.$apply(function() {
+ local_ctrl.converting = false;
+ local_ctrl.recordingDone = true;
+ })
+ 
+ 
+ elem.addEventListener("loadedmetadata", function(_event) {
+ //TODO whatever
+ console.log(_event)
+ var a = _event.srcElement;
+ 
+ // var start = this.seekable.start(0);  // Returns the starting time (in seconds)
+ // var end = this.seekable.end(0);    // Returns the ending time (in seconds)
+ 
+ 
+ console.log("duration:  ", a.duration)
+ // console.log("end-start: ", end-start)
+ });
+ elem.addEventListener("canplay", function(_event) {
+ console.log("canplay")
+ console.log("duration:  ", _event.target.duration)
+ }, true);
+ 
+ elem.addEventListener("canplaythrough", function(_event) {
+ console.log("canplaythrough")
+ console.log("duration:  ", _event.target.duration)
+ }, true);
+ };
+ //to read the content as binary use readAsArrayBuffer function.
+ reader.readAsDataURL(file);
+ 
+ // --------------------------------------------------------
+ // var arrayer = new FileReader();
+ // arrayer.onloadend = function(evt) {
+ //     // convert to ogg
+ //     var file_contents = evt.target.result;
+ 
+ //     console.log("ArrayBuffer: ", file_contents)
+ 
+ // var capture = convertOGG(file_contents, 0.4);
+ 
+ // var result = capture.stop();
+ 
+ // result.then(function(blob) {
+ //     var url = URL.createObjectURL(blob);
+ //     // Android Chrome BUG:
+ //     // need to download local blob for some reason
+ //     return downloadBlob(url);
+ // }).then(function(blob) {
+ //     var url = URL.createObjectURL(blob);
+ 
+ //     // set audio element as OGG file
+ //     var recording = document.getElementById('track-container')
+ //     done = true;
+ 
+ //     // var audio = recording.querySelector('audio');
+ //     // audio.src = url;
+ 
+ //     var size = recording.querySelector('[data-key=size] ~ .value');
+ //     size.innerText = blob.size;
+ // this_ctrl.converting = false;
+ // this_ctrl.recordingDone = true;
+ //     capture = null;
+ // });
+ 
+ // save as file
+ 
+ // upload to server
+ // };
+ //to read the content as binary use readAsArrayBuffer function.
+ // arrayer.readAsArrayBuffer(file);
+ 
+ 
+ };
+ 
+ var fail = function(error) {
+ console.log(error.code);
+ };
+ 
+ fileEntry.file(win, fail);
+ }, function(error) {
+ console.log("Error occurred while getting a pointer to file. Error code is: " + error.DOMError);
+ return;
+ });
+ 
+ }
+ 
+ function onFileError(evt) {
+ console.log("Error occurred during request to file system pointer. Error code is: " + evt.code);
+ }
+ 
+ }
+ 
+ function downloadBlob(url) {
+ return new Promise(function(resolve, reject) {
+ var xhr = new XMLHttpRequest();
+ xhr.open('GET', url, true);
+ xhr.responseType = 'blob';
+ 
+ xhr.onload = function() {
+ resolve(xhr.response)
+ };
+ 
+ xhr.onerror = reject;
+ 
+ xhr.send();
+ });
+ }
+ 
+ function convertOGG(file, quality) {
+ var bufferSize = 4 * 1024;
+ 
+ // var audioContext = new AudioContext();
+ // var audioSourceNode = audioContext.createMediaStreamSource(stream);
+ // var scriptProcessorNode = audioContext.createScriptProcessor(bufferSize);
+ 
+ var channels = 2;
+ // var sampleRate = audioContext.sampleRate;
+ var sampleRate = 8000;
+ 
+ var encoder =
+ Vorbis.Encoding.createVBR(channels, sampleRate, quality)
+ .then(Vorbis.Encoding.writeHeaders);
+ 
+ return encoder.then(Vorbis.Encoding.finish);
+ 
+ 
+ 
+ // scriptProcessorNode.onaudioprocess = function(ev) {
+ //     var inputBuffer = ev.inputBuffer;
+ //     var samples = inputBuffer.length;
+ 
+ //     var ch0 = inputBuffer.getChannelData(0);
+ //     var ch1 = inputBuffer.getChannelData(1);
+ 
+ //     // script processor reuses buffers; we need to make copies
+ //     ch0 = new Float32Array(ch0);
+ //     ch1 = new Float32Array(ch1);
+ 
+ //     // Float32Array is not Transferrable
+ //     // so we get the underlying ArrayBuffer
+ //     var buffers = [ch0.buffer, ch1.buffer];
+ 
+ //     encoder = encoder.then(Vorbis.Encoding.encodeTransfer(samples, buffers));
+ // };
+ 
+ // audioSourceNode.connect(scriptProcessorNode);
+ // scriptProcessorNode.connect(audioContext.destination);
+ 
+ // return {
+ //     stop: function() {
+ //         audioSourceNode.disconnect(scriptProcessorNode);
+ //         scriptProcessorNode.disconnect(audioContext.destination);
+ 
+ //         return encoder.then(Vorbis.Encoding.finish);
+ //     }
+ // };
+ }
+ 
+ scope.saveTrack = function() {
+ 
+ console.log("Saving track")
+ $mdDialog.hide();
+ 
+ }
+ 
+ scope.closeDialog = function() {
+ $mdDialog.hide();
+ }
+ 
+ scope.getAudio = function(evt) {
+ console.log("getAudio - doing", evt);
+ evt.preventDefault();
+ 
+ // Launch device audio recording application,
+ navigator.device.capture.captureAudio(captureAudioSuccess, captureAudioError, {
+ limit: 1
+ });
+ }
+ }
+ 
+ }
+ 
+ // Called when capture operation is finished
+ //
+ function captureAudioSuccess(mediaFiles) {
+ var i, len;
+ for (i = 0, len = mediaFiles.length; i < len; i += 1) {
+ console.log(mediaFiles[i]);
+ // uploadFile(mediaFiles[i]);
+ }
+ }
+ 
+ // Called if something bad happens.
+ //
+ function captureAudioError(error) {
+ var msg = 'An error occurred during capture: ' + error.code;
+ navigator.notification.alert(msg, null, 'Uh oh!');
+ }
+ 
+ 
+ }
+*/
