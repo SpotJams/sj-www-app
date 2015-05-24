@@ -1,6 +1,6 @@
 angular.module("SpotJams")
     .controller("SetupController",
-        function($rootScope, $scope, $location, $mdDialog, $stateParams, authService, profileService, imageService) {
+        function($rootScope, $scope, $location, $stateParams, authService, profileService, imageService) {
 
 
             // TODO, check if the version on the server is newer
@@ -21,7 +21,36 @@ angular.module("SpotJams")
                 self.dirty = true;
             }
 
-            self.profile = profileService.get();
+            angular.element($('.datepicker')).pickadate({
+                selectMonths: true, // Creates a dropdown to control month
+                selectYears: 100 // Creates a dropdown of 15 years to control year
+              });
+
+            $scope.pService = profileService
+            $scope.$watch('pService.get().uid', function(newVal) {
+                console.log("pub profile - uid update: ", newVal)
+                if ( newVal !== "" ) {
+                    self.profile = profileService.get()
+
+                    self.date = new Date(Date.parse(self.profile.birthday));
+                    self.dateString = self.profile.birthday;
+
+                    console.log(self.date, self.dateString);
+
+                    if (!self.profile.instruments) {
+                        self.profile.instruments = [];
+                    }
+                    if (!self.profile.genres) {
+                        self.profile.genres = [];
+                    }
+                    if (!self.profile.genresStr) {
+                        self.profile.genresStr = [];
+                    }
+
+                    console.log("setupCtrl: ", self.profile)
+
+                }
+            })
 
 
             var elem = document.getElementById('profile-location-input');
@@ -87,26 +116,6 @@ angular.module("SpotJams")
                     console.log("profile: ", self.profile)
                     self.markDirty();
                 });
-
-
-
-            self.date = new Date(Date.parse(self.profile.birthday));
-            self.dateString = self.profile.birthday;
-
-            console.log(self.date, self.dateString);
-
-            if (!self.profile.instruments) {
-                self.profile.instruments = [];
-            }
-            if (!self.profile.genres) {
-                self.profile.genres = [];
-            }
-            if (!self.profile.genresStr) {
-                self.profile.genresStr = [];
-            }
-
-            console.log("setupCtrl: ", self.profile)
-
 
 
             self.addInstrument = function(item) {

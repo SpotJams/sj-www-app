@@ -64,20 +64,18 @@ angular.module("SpotJams")
         console.log("LOADING USER PROFILE")
         var defer = $q.defer();
 
-        var dbP  = loadProfile(uid);
+        // var dbP  = loadProfile(uid);
         var srvP = loadPublicProfileFromServer(uid);
 
-        $q.all([dbP,srvP])
+        // $q.all([dbP,srvP])
+        srvP
         .then(function(result) {
-            var profiles = [];
-            angular.forEach(result, function(response) {
-                profiles.push(response);
-              });
-
-
+            
             /// TODO check profile last updated times and do appropriate shit
-            _instance._profile = profiles[0];
-            defer.resolve(profiles);
+            // _instance._profile = profiles[0];
+            console.log("pub result: ", result)
+            // _instance._profile = result;
+            defer.resolve(result);
         })
         .catch(function(error) {
             console.log("error loading profile: ", error);

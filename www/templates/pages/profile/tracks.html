@@ -1,0 +1,24 @@
+<div ng-controller="TracksPageController">
+    <div class="profile-section ">
+        <div id="tracks-title" class="section-title row">
+            <span class="col s3">Actions</span>
+        </div>
+        <div class="section-content">
+            <div id="profile-button-row" class="row" style="font-size: 0.7em;">
+                <span class="btn sj-red" ng-click="gotoTrackRecorder($event)" hm-tap="gotoTrackRecorder($event)">Record</span>
+            </div>
+        </div>
+    </div>
+    <div class="profile-section ">
+        <div id="tracks-title" class="section-title row">
+            <span class="col s3">Tracks</span>
+            <div class="col offset-s5 s4">
+                <i class="mdi-av-play-arrow green-text" ng-click="playAllTracks($event)" hm-tap="playAllTracks($event)"></i>
+                <i class="mdi-av-playlist-add" ng-click="queueAllTracks($event)" hm-tap="queueAllTracks($event)"></i>
+            </div>
+        </div>
+        <div class="section-content">
+            <track-list tracks="profile.tracks"></track-list>
+        </div>
+    </div>
+</div>

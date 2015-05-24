@@ -20,32 +20,38 @@ angular.module("SpotJams")
             $location.path("/user/" + pub_id);
         }
 
-        console.log("token: ", authService.token() )
+        $scope.auth = authService
+        $scope.$watch('auth.authed()', function(newVal) {
+            console.log("pub profile - authed update: ", newVal)
+            if ( newVal === true ) {
 
-        $http({
-            'method': "GET",
-            "url": HOMEBASE + "/api/briefs",
-            'headers': {
-                'Authorization': 'Bearer ' + authService.token(),
-            },
-        })
+                $http({
+                    'method': "GET",
+                    "url": HOMEBASE + "/api/briefs",
+                    'headers': {
+                        'Authorization': 'Bearer ' + authService.token(),
+                    },
+                })
 
-        .success(function(data, status, headers, config) {
-            // console.log(data)
-            if (data === undefined || data.error !== undefined) {
-                console.log("error: ", data.error);
-                alert("error: " + data.error);
-            } else {
-                $scope.people = data;
-                console.log("Loaded: ", $scope.people);
+                .success(function(data, status, headers, config) {
+                    // console.log(data)
+                    if (data === undefined || data.error !== undefined) {
+                        console.log("error: ", data.error);
+                        alert("error: " + data.error);
+                    } else {
+                        $scope.people = data;
+                        console.log("Loaded: ", $scope.people);
 
-                // HACK to refresh ui
+                        // HACK to refresh ui
+                    }
+                })
+
+                .error(function(data, status, headers, config) {
+                    console.log("error:", data);
+                    alert("server error");
+                })
             }
         })
 
-        .error(function(data, status, headers, config) {
-            console.log("error:", data);
-            alert("server error");
-        })
     }
 );

@@ -1,0 +1,27 @@
+<div ng-controller="TrackRecorderController">
+    <div class="profile-section ">
+        <div id="tracks-title" class="section-title row">
+            <span class="col s3">Actions</span>
+        </div>
+        <div class="section-content content">
+            <div class="row center-align">
+                <span class="btn-floating btn-large sj-red" ng-click="addNewLayer($event)" hm-tap="addNewLayer($event)"><i class="mdi-content-add"></i></span>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="profile-section ">
+        <div id="tracks-title" class="section-title row">
+            <span class="col s3">Layers</span>
+        </div>
+        <div class="section-content content">
+            <div class="row center-align">
+                <div class="col offset-s2 s8" ng-repeat="layer in layers">
+                    <audio-layer layer='layer'></audio-layer>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

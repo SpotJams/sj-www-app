@@ -55,9 +55,11 @@ angular.module("SpotJams")
         }
 
         console.log("track - playNow", tid)
+        Materialize.toast('Playing track', 3000)
 
         var plc = angular.element($('#playlist-container'))
         plc.scope().addPlayTrack(null,self.track);
+
 
         // $mdToast.show(
         //   $mdToast.simple()
@@ -73,6 +75,7 @@ angular.module("SpotJams")
         }
 
         console.log("track - addQueue", tid)
+        Materialize.toast('Queuing track', 3000)
 
         var plc = angular.element($('#playlist-container'))
         plc.scope().addTrackBack(self.track);

@@ -67,6 +67,14 @@ angular.module('SpotJams')
 
 
 
+
+            .state('track_recorder', {
+                url: '/recorder',
+                templateUrl: 'templates/pages/media/track_recorder.html'
+            })
+
+
+
             // VJAMS pages
             .state('vjams', {
                 url: '/vjams',

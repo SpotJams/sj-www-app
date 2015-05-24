@@ -1,6 +1,8 @@
 <div ng-controller="PersonCardController">
-    <div class="person-card-container" layout="column" layout-fill>
-        <span>{{person.shortBio}}</span>
-        <track-list tracks="person.tracks"></track-list>
+    <div class="person-card-container row">
+        <span class="col offset-s2 s8">{{person.shortBio}}</span>
+        <div class="col offset-s1 s10">
+	        <track-list tracks="person.tracks"></track-list>
+	    </div>
     </div>
 </div>

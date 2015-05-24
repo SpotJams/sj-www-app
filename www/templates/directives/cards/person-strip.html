@@ -1,12 +1,12 @@
 <div ng-controller="PersonStripController">
-    <div class="person-strip-container" layout="column" layout-fill>
+    <div class="person-strip-container">
         
         <!-- Person Strip -->
-        <div layout="row" layout-fill>
-            <div ng-click="gotoUser($event, person.uid)" hm-tap="gotoUser($event, person.uid)">
-                <img ng-src="{{person.thumbURL}}"></img>
+        <div class="row">
+            <div class="col s2" ng-click="gotoUser($event, person.uid)" hm-tap="gotoUser($event, person.uid)">
+                <img class="responsive-img" ng-src="{{person.thumbURL}}"></img>
             </div>
-            <div flex layout="column" style="margin-left: 10px; text-align: left; font-size: 0.8em;">
+            <div class="col s6" style="margin-left: 10px; text-align: left; font-size: 0.8em;">
                 <div>
                 <b style="font-size: 1.6em" class="blue-text">
                     {{person.username}} </b><span
@@ -23,10 +23,10 @@
                         {{item.displayName}}; </i>
                 </div>
             </div>
-            <div class="person-strip-controls" layout="column" layout-align="space-around end">
-                <span class="icon-avatar blue-text" ng-click="gotoUser($event, person.uid)" hm-tap="gotoUser($event, person.uid)"></span>
-                <span class="icon-dropmenu" ng-show="cardHidden" ng-click="showCard($event)" hm-tap="showCard($event)"></span>
-                <span class="icon-uploadalt" ng-hide="cardHidden" ng-click="hideCard($event)" hm-tap="hideCard($event)"></span>
+            <div class="col s2 person-strip-controls">
+                <span class="mdi-social-person-outline blue-text" ng-click="gotoUser($event, person.uid)" hm-tap="gotoUser($event, person.uid)"></span>
+                <span class="mdi-navigation-expand-more" ng-show="cardHidden" ng-click="showCard($event)" hm-tap="showCard($event)"></span>
+                <span class="mdi-navigation-expand-less" ng-hide="cardHidden" ng-click="hideCard($event)" hm-tap="hideCard($event)"></span>
             </div> 
         </div>
         

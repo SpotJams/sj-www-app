@@ -15,6 +15,42 @@ if ( window.navigator.platform === "MacIntel" || window.navigator.platform === "
 console.log(window);
 console.log(window.navigator);
 
+function hasGetUserMedia() {
+  return !!(navigator.getUserMedia || navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia || navigator.msGetUserMedia);
+}
+
+if (hasGetUserMedia()) {
+  console.log("Has GET USER MEDIA")
+  navigator.getUserMedia  = navigator.getUserMedia ||
+                          navigator.webkitGetUserMedia ||
+                          navigator.mozGetUserMedia ||
+                          navigator.msGetUserMedia;
+
+} else {
+  console.log("NOOOOOOOOOO GET USER MEDIA")
+}
+
+var errorCallback = function(e) {
+    console.log('Reeeejected!', e);
+  };
+
+window.requestAnimFrame = (function(){
+  return  window.requestAnimationFrame       ||
+          window.webkitRequestAnimationFrame ||
+          window.mozRequestAnimationFrame    ||
+          function(callback, element){
+            window.setTimeout(callback, 1000 / 60);
+          };
+})();
+
+window.AudioContext = (function(){
+    return  window.AudioContext || window.mozAudioContext || window.webkitAudioContext ;
+})();
+
+
+
+
 
 /*jslint browser:true, devel:true, white:true, vars:true */
 /*global $:false, intel:false, app:false, dev:false */

@@ -3,28 +3,18 @@ angular.module("SpotJams")
 .controller("ProfileController",
     function($scope, $rootScope, $state, $timeout, profileService) {
 
-        // This is to wait on the load of the profile if this is the first page we visit
-        var tmp = profileService.get().uid
-        if (tmp == undefined) {
-            var TIMEOUT = 100;
-            var foo = function() {
-                var tmp = profileService.get().uid
-                console.log("profile: ", $scope.profile)
-                if( !tmp ) {
-                    $timeout(foo, TIMEOUT);
-                } else {
-                    $scope.profile = profileService.get()
-                }
+        $scope.pService = profileService
+        $scope.$watch('pService.get().uid', function(newVal) {
+            console.log("pub profile - uid update: ", newVal)
+            if ( newVal !== "" ) {
+                $scope.profile = profileService.get()
             }
-            foo();
-        } else {
-            $scope.profile = profileService.get();
-        }
+        })
 
         console.log("ProfileController: ", $scope.profile)
-        $rootScope.tempTitle = "Profile";
+        $rootScope.tempTitle = "Your Profile";
         $scope.$on("$destroy", function() {
-            if ($rootScope.tempTitle == "Profile") {
+            if ($rootScope.tempTitle == "Your Profile") {
                 $rootScope.tempTitle = "";
             }
         });
@@ -76,9 +66,11 @@ angular.module("SpotJams")
             }
 
             console.log("queueAllTracks")
+            Materialize.toast('Queuing ' + $scope.profile.tracks.length + " tracks.", 3000)
 
             var plc = angular.element($('#playlist-container'))
             plc.scope().addTrackListBack($scope.profile.tracks);
+
 
             // $mdToast.show(
             //     $mdToast.simple()
@@ -86,13 +78,14 @@ angular.module("SpotJams")
             // );
         }
 
-        $scope.playeAllTracks = function($event) {
+        $scope.playAllTracks = function($event) {
             var pass = spotjams.clickbuster.onClick(event);
             if (!pass) {
                 return;
             }
 
             console.log("playAllTracks")
+            Materialize.toast('Playing ' + $scope.profile.tracks.length + " tracks.", 3000)
 
             var plc = angular.element($('#playlist-container'))
             plc.scope().addTrackListFrontPlay($scope.profile.tracks);
