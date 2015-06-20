@@ -215,7 +215,9 @@ angular.module('SpotJams')
         // TODO on end handler
         // clearInterval(ctrl.timer)
 
-        ctrl.mediaPlayer.play();
+        ctrl.player.play();
+
+        // ctrl.mediaPlayer.play();
         ctrl.timer = setInterval(function() {
             var position = ctrl.mediaPlayer.currentTime
             // console.log(position);
@@ -305,8 +307,19 @@ angular.module('SpotJams')
 
                 ctrl.trustedURL = $sce.trustAsResourceUrl(meta_data.trackURL);
                 console.log("trustedURL: ", ctrl.trustedURL);
-                ctrl.mediaPlayer.src = ctrl.trustedURL;
-                ctrl.mediaPlayer.load();
+
+                // var asset = AV.Asset.fromURL(ctrl.trustedURL);
+                // asset.get('duration', function(duration) {
+                //   console.log("duration: ", duration)
+                // });
+
+                // asset.start();
+
+                ctrl.player = AV.Player.fromURL(ctrl.trustedURL);
+                // player.play();
+
+                // ctrl.mediaPlayer.src = ctrl.trustedURL;
+                // ctrl.mediaPlayer.load();
                 console.log("playing? ", ctrl.playing)
                 if (ctrl.playing) {
                     console.log("calling ctrl.play()")

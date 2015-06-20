@@ -96,7 +96,7 @@
 
 
 
-
+<!--
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -105,6 +105,7 @@
       ga('create', 'UA-60486108-1', 'auto');
       // ga('send', 'pageview');
     </script>
+-->
 
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
 
@@ -132,6 +133,18 @@
     <script src="vendor/angulartics-scroll.min.js"></script>
 
 
+
+    <script src="vendor/audioContextMonkeyPatch.js"></script>
+
+    <script src="vendor/recorder.js"></script>
+    <script src="vendor/aurora.js"></script>
+    <script src="vendor/aac.js"></script>
+    <script src="vendor/alac.js"></script>
+    <script src="vendor/flac.js"></script>
+    <script src="vendor/mp3.js"></script>
+
+
+
     <!-- // <script src="cordova.js"></script> -->
 
 
@@ -147,7 +160,6 @@
     <script src="js/services/auth_manager.js"></script>
     <script src="js/services/image_manager.js"></script>
     <script src="js/services/track_manager.js"></script>
-    <script src="js/services/track_capture.js"></script>
     <script src="js/services/playlist_manager.js"></script>
     <script src="js/services/profile_manager.js"></script>
     <script src="js/services/social_manager.js"></script>
@@ -162,14 +174,15 @@
     <script src="js/directives/lists/track-list.js"></script>
 
 
+
+    <script src="js/directives/media/audio-layer.js"></script>
+    <script src="js/directives/media/web-audio-recorder.js"></script>
+    <!-- // <script src="js/directives/media/mob-audio-recorder.js"></script> -->
+
     <script src="js/directives/player/playlist.js"></script>
 
-    <script src="js/directives/media/audio_layer.js"></script>
-    <script src="js/directives/media/track_recorder.js"></script>
-    <script src="js/directives/media/track_player.js"></script>
 
 
-    <script src="js/controllers/player.js"></script>
     <script src="js/controllers/toolbar.js"></script>
     <script src="js/controllers/index.js"></script>
     <script src="js/controllers/main.js"></script>

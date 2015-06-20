@@ -7,13 +7,38 @@ window.app = window.app || {} ;         // there should only be one of these...
 
 window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
 
+
+window.requestAnimFrame = (function(){
+  return  window.requestAnimationFrame       ||
+          window.webkitRequestAnimationFrame ||
+          window.mozRequestAnimationFrame    ||
+          function(callback, element){
+            window.setTimeout(callback, 1000 / 60);
+          };
+})();
+
+if (!navigator.cancelAnimationFrame)
+    navigator.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
+if (!navigator.requestAnimationFrame)
+    navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
+
+window.AudioContext = window.AudioContext || window.webkitAudioContext;
+
+
+
+
+
+
+
+
+
+
+
+
 window.isMac = false;
 if ( window.navigator.platform === "MacIntel" || window.navigator.platform === "iPhone") {
     window.isMac = true;
 }
-
-console.log(window);
-console.log(window.navigator);
 
 function hasGetUserMedia() {
   return !!(navigator.getUserMedia || navigator.webkitGetUserMedia ||
@@ -26,45 +51,19 @@ if (hasGetUserMedia()) {
                           navigator.webkitGetUserMedia ||
                           navigator.mozGetUserMedia ||
                           navigator.msGetUserMedia;
-
 } else {
-  console.log("NOOOOOOOOOO GET USER MEDIA")
+  console.log("This browser does not support sufficient Web Audio interfaces for recording. Download the mobile app or try chrome on a desktop or android.")
 }
 
 var errorCallback = function(e) {
     console.log('Reeeejected!', e);
   };
 
-window.requestAnimFrame = (function(){
-  return  window.requestAnimationFrame       ||
-          window.webkitRequestAnimationFrame ||
-          window.mozRequestAnimationFrame    ||
-          function(callback, element){
-            window.setTimeout(callback, 1000 / 60);
-          };
-})();
-
-window.AudioContext = (function(){
-    return  window.AudioContext || window.mozAudioContext || window.webkitAudioContext ;
-})();
-
-
-
-
 
 /*jslint browser:true, devel:true, white:true, vars:true */
 /*global $:false, intel:false, app:false, dev:false */
 /*global myEventHandler:false, cordova:false, device:false */
 
-// window.onClick = spotjams.ui.FastButton.prototype.onClick;
-
-// window.onclick = function(evt) {
-//     console.log("window.onclick() - ENTER ");
-
-//     spotjams.clickbuster.onClick(evt);
-
-//     console.log("window.onclick() - PASS  ");
-// }
 
 // Set to "true" if you want the console.log messages to appear.
 

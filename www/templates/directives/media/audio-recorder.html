@@ -1,0 +1,49 @@
+<div ng-controller="audioRecorderController">
+	<div class="row">
+		<div class="col s12 offset-m1 m10 sj-yellow">
+			    
+                <div class="btn sj-blue" ng-hide="isRecording || hasRecording" hm-tap="startRecording($event)" ng-click="startRecording($event)">Record</div>
+                
+                <div class="btn sj-blue" ng-show="isRecording" hm-tap="stopRecording($event)" ng-click="stopRecording($event)">Stop</div>
+                
+
+                <div class="btn sj-blue" ng-show="hasRecording && !isPlaying" hm-tap="clearRecording($event)" ng-click="clearRecording($event)">Clear</div>
+                                
+
+                <div class="btn sj-blue" ng-show="hasRecording && !isPlaying" hm-tap="playAudio($event)" ng-click="playAudio($event)">Play</div>
+
+                <a id="downloadLink">
+                    <div class="btn sj-blue" ng-show="hasRecording">
+                        Download
+                    </div>
+                </a>
+                
+                <div class="btn sj-blue" ng-show="isPlaying" hm-tap="stopAudio($event)" ng-click="stopAudio($event)">Stop</div>
+                
+
+                <div class="right-align">
+                    <span ng-hide="hasRecording">{{recTime | tracktime}}</span>
+                    <span ng-show="hasRecording">
+                        <span ng-show="isPlaying">{{playTime | tracktime }}/</span>
+                        {{totalTime | tracktime}}
+                    </span>
+                </div>
+
+                
+
+		</div>
+	</div>
+
+    <div class="row">
+        <div class="col s12">
+            <canvas id="analyzer" style="width: 100%; height: 128px; display: block; background-color: black;"></canvas>
+
+        </div>
+        <br><br>
+        <div class="col s12">
+            <canvas id="wavedisplay" style="width: 100%; height: 128px; display: block; background-color: black;"></canvas>
+
+        </div>
+    </div>
+
+</div>

@@ -1,6 +1,6 @@
 angular.module("SpotJams")
 
-.factory("trackRecorder", function($http, authService) {
+.factory("webTrackRecorder", function($http, authService) {
 
     var _track_dir = "SpotJams/tracks/";
 

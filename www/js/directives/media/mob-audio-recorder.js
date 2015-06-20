@@ -1,16 +1,16 @@
 angular.module("SpotJams")
 
-.directive("audioLayer", function() {
+.directive("audioRecorder", function() {
     return {
         restrict: 'E',
-        templateUrl: 'templates/directives/media/audio-layer.html',
+        templateUrl: 'templates/directives/media/audio-recorder.html',
         scope: {
             layer: '='
         },
     }
 })
 
-.controller("audioLayerController", function($scope, authService, profileService, trackService) {
+.controller("audioRecorderController", function($scope, authService, profileService, trackService) {
 
 	console.log("layer: ", $scope.layer)
     
@@ -61,34 +61,6 @@ angular.module("SpotJams")
         description: "tell us about this track!"
     }
 
-    function setupAudioNodes(stream) {
-        // create the media stream from the audio input source (microphone)
-        self.sourceNode = self.audioContext.createMediaStreamSource(stream);
-        self.audioStream = stream;
-
-        self.analyserNode   = self.audioContext.createAnalyser();
-        self.javascriptNode = self.audioContext.createScriptProcessor(self.sampleSize, 1, 1);
-
-        // Create the array for the data values
-        self.amplitudeArray = new Uint8Array(self.analyserNode.frequencyBinCount);
-
-        // setup the event handler that is triggered every time enough samples have been collected
-        // trigger the audio analysis and draw one column in the display based on the results
-        self.javascriptNode.onaudioprocess = function () {
-
-            self.amplitudeArray = new Uint8Array(self.analyserNode.frequencyBinCount);
-            self.analyserNode.getByteTimeDomainData(self.amplitudeArray);
-
-            // draw one column of the display
-            requestAnimFrame(drawTimeDomain);
-        }
-
-        // Now connect the nodes together
-        // Do not connect source node to destination - to avoid feedback
-        self.sourceNode.connect(self.analyserNode);
-        self.analyserNode.connect(self.javascriptNode);
-        self.javascriptNode.connect(self.audioContext.destination);
-    }
 
     function drawTimeDomain() {
         var minValue = 9999999;
@@ -128,6 +100,107 @@ angular.module("SpotJams")
         self.ctx.stroke();
     }
 
+    function setupAudioNodes(stream) {
+        // create the media stream from the audio input source (microphone)
+        self.sourceNode = self.audioContext.createMediaStreamSource(stream);
+        self.audioStream = stream;
+
+        self.analyserNode   = self.audioContext.createAnalyser();
+        self.javascriptNode = self.audioContext.createScriptProcessor(self.sampleSize, 1, 1);
+
+        // Create the array for the data values
+        self.amplitudeArray = new Uint8Array(self.analyserNode.frequencyBinCount);
+
+        // setup the event handler that is triggered every time enough samples have been collected
+        // trigger the audio analysis and draw one column in the display based on the results
+        self.javascriptNode.onaudioprocess = function () {
+
+            self.amplitudeArray = new Uint8Array(self.analyserNode.frequencyBinCount);
+            self.analyserNode.getByteTimeDomainData(self.amplitudeArray);
+
+            // draw one column of the display
+            requestAnimFrame(drawTimeDomain);
+        }
+
+        // Now connect the nodes together
+        // Do not connect source node to destination - to avoid feedback
+        self.sourceNode.connect(self.analyserNode);
+        self.analyserNode.connect(self.javascriptNode);
+        self.javascriptNode.connect(self.audioContext.destination);
+    }
+
+function doneEncoding( blob ) {
+    Recorder.setupDownload( blob, "myRecording" + ((recIndex<10)?"0":"") + recIndex + ".wav" );
+    recIndex++;
+}
+
+function cancelAnalyserUpdates() {
+    window.cancelAnimationFrame( rafID );
+    rafID = null;
+}
+
+function updateAnalysers(time) {
+    if (!analyserContext) {
+        var canvas = document.getElementById("analyser");
+        canvasWidth = canvas.width;
+        canvasHeight = canvas.height;
+        analyserContext = canvas.getContext('2d');
+    }
+
+    // analyzer draw code here
+    {
+        var SPACING = 3;
+        var BAR_WIDTH = 1;
+        var numBars = Math.round(canvasWidth / SPACING);
+        var freqByteData = new Uint8Array(analyserNode.frequencyBinCount);
+
+        analyserNode.getByteFrequencyData(freqByteData); 
+
+        analyserContext.clearRect(0, 0, canvasWidth, canvasHeight);
+        analyserContext.fillStyle = '#F6D565';
+        analyserContext.lineCap = 'round';
+        var multiplier = analyserNode.frequencyBinCount / numBars;
+
+        // Draw rectangle for each frequency bin.
+        for (var i = 0; i < numBars; ++i) {
+            var magnitude = 0;
+            var offset = Math.floor( i * multiplier );
+            // gotta sum/average the block, or we miss narrow-bandwidth spikes
+            for (var j = 0; j< multiplier; j++)
+                magnitude += freqByteData[offset + j];
+            magnitude = magnitude / multiplier;
+            var magnitude2 = freqByteData[i * multiplier];
+            analyserContext.fillStyle = "hsl( " + Math.round((i*360)/numBars) + ", 100%, 50%)";
+            analyserContext.fillRect(i * SPACING, canvasHeight, BAR_WIDTH, -magnitude);
+        }
+    }
+    
+    rafID = window.requestAnimationFrame( updateAnalysers );
+}
+function gotStream(stream) {
+    inputPoint = audioContext.createGain();
+
+    // Create an AudioNode from the stream.
+    realAudioInput = audioContext.createMediaStreamSource(stream);
+    audioInput = realAudioInput;
+    audioInput.connect(inputPoint);
+
+//    audioInput = convertToMono( input );
+
+    analyserNode = audioContext.createAnalyser();
+    analyserNode.fftSize = 2048;
+    inputPoint.connect( analyserNode );
+
+    audioRecorder = new Recorder( inputPoint );
+
+    zeroGain = audioContext.createGain();
+    zeroGain.gain.value = 0.0;
+    inputPoint.connect( zeroGain );
+    zeroGain.connect( audioContext.destination );
+    updateAnalysers();
+}
+
+
     self.startRecording = function(event) {
         var pass = spotjams.clickbuster.onClick(event);
         if (!pass) {
@@ -143,51 +216,16 @@ angular.module("SpotJams")
 
 		clearCanvas();
 
-            // get the input audio stream and set up the nodes
-            try {
-                navigator.getUserMedia(
-                  { video: false,
-                    audio: true},
-                  setupAudioNodes,
-                  onError);
-            } catch (e) {
-                alert('webkitGetUserMedia threw exception :' + e);
-            }
-
-		// var errorCallback = function(e) {
-		//     console.log('Reeeejected!', e);
-		// };
-
-		// var context = new AudioContext();
-		// navigator.getUserMedia({audio: true}, function(stream) {
-		//   var microphone = context.createMediaStreamSource(stream);
-		  
-		//   // microphone -> filter -> destination.
-		//   // var filter = context.createBiquadFilter();
-		//   // microphone.connect(filter);
-		//   // filter.connect(context.destination);
-
-		//   // microphone -> destination.
-		//   microphone.connect(context.destination);
-		
-		// 	self.recTime = 0;
-	 //        self.startTime = new Date().getTime()
-	 //        self.timer = setInterval(function() {
-	 //            var currTime = new Date().getTime();
-	 //            var currDiff = currTime - self.startTime;
-	 //            self.recTime = currDiff / 1000.0;
-	 //            self.$apply()
-	 //        }, 100);
-
-	 //        console.log("start recording");
-	 //        self.isRecording = true;
-
-	          
-		// }, errorCallback);
-
-
-
-        
+        // get the input audio stream and set up the nodes
+        try {
+            navigator.getUserMedia(
+              { video: false,
+                audio: true},
+              setupAudioNodes,
+              onError);
+        } catch (e) {
+            alert('webkitGetUserMedia threw exception :' + e);
+        }
     }
 
     self.stopRecording = function(event) {
